@@ -1,0 +1,41 @@
+
+div#Header a.active, div#Header a:hover {
+    color: #f0ac3e; /* Yellow*/
+}
+
+div#Services {
+    padding-top: 30px;
+    margin-bottom: 30px;
+}
+
+    div#Services img {
+        width: 100px;
+        margin-right: 20px;
+    }
+
+div#About {
+    padding-top: 30px;
+}
+
+    div#About img {
+        max-width: 400px;
+    }
+
+div#Fees {
+    background-color: #f6f8f9 /*Off-white*/; /*or background*/
+    padding-top: 30px;
+}
+
+div#Fees h2 {
+    text-align: center;
+}
+    div#Fees ul li {
+        margin-left: 40px;
+        padding-bottom: 5px;
+        list-style-image: url(../images/bluedot.png); /* or list-style */
+    }
+
+div#Footer {
+    padding: 10px;
+    margin-bottom: 50px; /* New */
+}
