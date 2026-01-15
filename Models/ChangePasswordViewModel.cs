@@ -1,3 +1,4 @@
+//ChangePasswordVewModel
 using System.ComponentModel.DataAnnotations;
 
 public class ChangePasswordViewModel
@@ -16,3 +17,4 @@ public class ChangePasswordViewModel
     public string ConfirmPassword { get; set; }
 }
 //PCVM
+
