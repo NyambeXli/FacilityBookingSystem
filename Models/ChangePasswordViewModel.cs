@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 public class ChangePasswordViewModel
 {
@@ -15,3 +15,4 @@ public class ChangePasswordViewModel
     [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
     public string ConfirmPassword { get; set; }
 }
+//PCVM
