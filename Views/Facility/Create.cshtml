@@ -1,0 +1,25 @@
+﻿@model Facility
+@{
+    ViewData["Title"] = "Create Facility";
+}
+<h4>Create Facility</h4>
+
+<form asp-action="Create" method="post">
+    <div class="text-danger" asp-validation-summary="All"></div>
+    <div class="form-group">
+        <label>Category</label>
+        <select asp-items="@ViewBag.CategoryId" asp-for="CategoryId" class="form-control">
+            <option>--- Select Category ---</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Facilities" asp-controller="Manager"> Back To List</a>
+    </div>
+</form>
+

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Facility>
+@{
+    ViewData["Title"] = "Facilities";
+}
+<h4>Avaialble facilities</h4>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Facility ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var facility in Model)
+        {
+            <tr>
+                <td>@facility.FacilityId</td>
+                <td>@facility.Name</td>
+                <td>@facility.Category!.Name</td>
+                <td>
+                   
+                    <a asp-action="Details" asp-route-FacilityId="@facility.FacilityId" class="text-primary ">View Facility</a>
+                    @if (!User.IsInRole("AppUser"))
+                    {
+                        <a asp-action="Edit" asp-route-FacilityId="@facility.FacilityId" class="text-warning ">Edit facility </a>
+                        <a asp-action="Delete" asp-route-FacilityId="@facility.FacilityId" class="text-danger ">Delete facility</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

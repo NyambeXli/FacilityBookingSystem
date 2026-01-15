@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Details";
+}
+@model Facility
+
+<style>
+    .background-image {
+        background-image: url('/images/Bookings.png'); 
+        background-size: cover; 
+        background-repeat: no-repeat;
+        background-position: center center;
+        min-height: 60vh; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .content-container {
+        background-color: rgba(255, 255, 255, 0.8); 
+    }
+
+    .facility-image {
+        max-width: 700px; 
+        max-height: 380px; 
+        width: auto; 
+        height: auto; }
+
+    body {
+       
+        padding-bottom: 50px; 
+    }
+</style>
+
+<body>
+<div class="background-image">
+    <div class="content-container">
+        <img src="@Model.ImagePath" alt="Facility Image" class="facility-image" />
+        <h3>Facility Details</h3>
+        <p>The following are the details of the selected facility</p>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Category
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Category!.Name)
+            </dd>
+            <dt class="col-sm-2">
+    Price
+</dt>
+<dd class="col-sm-10">
+    R90
+</dd>
+        </dl>
+        <p>
+            <a asp-action="Index" asp-controller="Facility">See full list</a>
+        </p>
+    </div>
+</div>
+</body>
