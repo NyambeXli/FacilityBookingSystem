@@ -1,0 +1,35 @@
+﻿@model IEnumerable<FeedBack>
+
+<div class="table-container">
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th><i class="fas fa-id-card" style="color: green;"></i> Feedback ID</th>
+                <th><i class="fas fa-star" style="color: gold;"></i> Rating</th>
+                <th><i class="fas fa-comment-alt" style="color: blue;"></i> Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rating in Model)
+            {
+                <tr>
+                    <td>@rating.Id</td>
+                    <td>
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            @if (i < rating.Number)
+                            {
+                                <span class="fas fa-star" style="color: gold;"></span>
+                            }
+                            else
+                            {
+                                <span class="far fa-star" style="color: gray;"></span>
+                            }
+                        }
+                    </td>
+                    <td>@rating.Comment</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
