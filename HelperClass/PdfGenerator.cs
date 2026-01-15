@@ -1,4 +1,5 @@
-﻿using DinkToPdf;
+//pdf generator
+using DinkToPdf;
 using DinkToPdf.Contracts;
 using System.IO;
 
@@ -42,3 +43,4 @@ namespace UfsConnectBook.Utilities
         byte[] GeneratePdf(string htmlContent);
     }
 }
+
