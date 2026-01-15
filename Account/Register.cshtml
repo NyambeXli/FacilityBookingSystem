@@ -1,0 +1,100 @@
+﻿@model RegisterModel
+@{
+    ViewBag.Title = "Student Register";
+}
+<style>
+    body {
+        background-image: url('/images/RegisterSSS1.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+</style>
+
+<div class="container">
+<h4>User registration</h4>
+    <div class="row justify-content-end">
+        <div class="col-md-6">
+<p>
+    You are not yet registered for for using Ufs Connect Book.
+    Please enter your personal details.
+</p>
+
+<div class="text-danger" asp-validation-summary="All"></div>
+
+<div class=" container" bg-primary> </div>
+    <form asp-action="Register" asp-controller="Account" method="post">
+
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <div><span asp-validation-for="Name" class="text-danger"></span></div>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Surname"></label>
+            <div><span asp-validation-for="Surname" class="text-danger"></span></div>
+            <input asp-for="Surname" class="form-control" />
+        </div>
+                <div class="form-group">
+                    <label asp-for="EmailAddress"></label>
+                    <div><span asp-validation-for="EmailAddress" class="text-danger"></span></div>
+                    <input asp-for="EmailAddress" class="form-control" />
+                </div>
+        <div class="form-group">
+            <label asp-for="Identification"></label>
+                    <div><span asp-validation-for="Identification" class="text-danger"></span></div>
+                    <input asp-for="Identification" class="form-control" />
+
+        </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="input-group">
+                        <input asp-for="Password" class="form-control" id="password-input" type="password" />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i id="password-toggle" class="fa fa-eye"></i>
+                            </span>
+                        </div>
+                        
+                    </div>
+
+                    <label asp-for="ConfirmPassword"></label>
+                    <div>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="input-group">
+                        <input asp-for="ConfirmPassword" class="form-control" id="password-input" type="password" />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i id="password-toggle" class="fa fa-eye"></i>
+                            </span>
+                        </div>
+            
+                    </div>
+                  </div>
+                <button class="btn btn-primary" type="submit">Register</button>
+            </form> 
+                </div>
+
+                <script>
+                    var passwordInput = document.getElementById("password-input");
+                    var passwordToggle = document.getElementById("password-toggle");
+
+                    passwordToggle.addEventListener("click", function () {
+                        if (passwordInput.type === "password") {
+                            passwordInput.type = "text";
+                            passwordToggle.classList.remove("fa-eye");
+                            passwordToggle.classList.add("fa-eye-slash");
+                        } else {
+                            passwordInput.type = "password";
+                            passwordToggle.classList.remove("fa-eye-slash");
+                            passwordToggle.classList.add("fa-eye");
+                        }
+                    });
+                </script>
+
+
+                </div>
