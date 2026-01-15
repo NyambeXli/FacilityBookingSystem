@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
-// Add services to the container.
+// Add services to the container..
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -52,3 +52,4 @@ app.MapControllerRoute(
 
 SeedDataIdentity.EnsurePopulated(app);
 app.Run();
+
