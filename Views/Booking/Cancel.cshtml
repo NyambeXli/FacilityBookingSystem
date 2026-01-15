@@ -1,0 +1,65 @@
+﻿@model Booking
+@{
+    ViewData["Title"] = "Cancel Booking";
+}
+<style>
+    body {
+        background-image: url('/images/Booking.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+</style>
+<h4>Cancel Booking</h4>
+
+<div>
+    <h6>Are you sure you want to cancel/delete this booking?</h6>
+    <small>This record will be marked as cancelled</small>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BookingDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BookingDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.StartTime.ToShortTimeString()
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.EndTime.ToShortTimeString()
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FacilityId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Facility!.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var dur = Model.EndTime - Model.StartTime;
+            }
+            @dur
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Status.ToString()
+        </dd>
+    </dl>
+    <form asp-action="Cancel" method="post">
+        @Html.HiddenFor(model => model.Id)
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </form>
+</div>

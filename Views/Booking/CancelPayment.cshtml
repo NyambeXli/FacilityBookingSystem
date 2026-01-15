@@ -1,0 +1,54 @@
+﻿@model Booking
+@{
+    ViewData["Title"] = "Bookings";
+}
+<style>
+    body {
+        background-image: url('/images/Booking.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    .payment-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 25px;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+        .payment-button:hover {
+            background-color: #ffc0cb;
+            transform: scale(1.05);
+        }
+</style>
+
+
+<div style="display: flex;">
+    <div style="width: 30%;">
+        <img src="~/images/PaymentSuccess.png" alt="Bookings Image" style="width: 100%;" />
+    </div>
+    <div style="width: 70%;">
+        <h3 style="color: red;"> Cancelled !!!</h3>
+        <p> Your payment was canceled succesful </p>
+
+        <h4> THANK YOU. </h4>
+        <form asp-controller="Home" asp-action="Index" method="get">
+            <button type="submit" class="payment-button">Back to home page</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+

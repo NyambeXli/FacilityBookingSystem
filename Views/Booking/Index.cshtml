@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Booking>
+@{
+    ViewData["Title"] = "Bookings";
+}
+<style>
+    body {
+        background-image: url('/images/Booking.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    .payment-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 25px;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+
+        .payment-button:hover {
+            background-color: #ffc0cb;
+            transform: scale(1.05);
+        }
+</style>
+<h4>My Bookings</h4>
+<a asp-action="Create" asp-controller="Booking" class="btn btn-primary"> Book New</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Facility</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.StartTime.ToShortTimeString()</td>
+                <td>@booking.EndTime.ToShortTimeString()</td>
+                <td>@booking.Facility!.Name</td>
+                <td>@booking.BookingDate</td>
+                <td>@booking.Status.ToString()</td>
+                <td>
+                <td>
+                        @if (booking.Status == "Pending")
+                        {
+                        <form asp-controller="Booking" asp-action="Payment" method="get">
+                            <button type="submit" class="payment-button">Make Payments</button>
+                        </form>
+                        }
+                </td>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-bookingID="@booking.Id" class="text-primary fa fa-eye"></a>
+                </td>
+                @if (booking.Status == "Pending")
+                {
+
+                    <td>
+                        <a asp-action="Edit" asp-route-bookingID="@booking.Id" class="text-info fa fa-edit "></a>
+                    </td>
+                    @*                    <td>
+            <a asp-action="Cancel" asp-route-bookingID="@booking.Id" class="text-danger fa fa-delete-left"></a>
+            </td>*@
+                    <td>
+                        <form asp-controller="Booking" asp-action="ConfirmCancel" asp-route-bookingID="@booking.Id" method="post" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                            <button type="submit" class="text-danger fa fa-delete-left"></button>
+                        </form>
+                    </td>
+
+                }
+
+             
+            
+            </tr>
+
+        }
+    </tbody>
+                   <form asp-controller="Booking" asp-action="FeedBack" method="get">
+                    <button type="submit" class="FeedBack-button">Feedback</button>
+                </form>
+</table>

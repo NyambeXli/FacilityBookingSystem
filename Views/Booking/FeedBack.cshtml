@@ -1,0 +1,104 @@
+﻿@model UfsConnectBook.Models.Entities.FeedBack
+
+@{
+    ViewData["Title"] = "Feedback";
+}
+
+<div style="display: flex;">
+    <div style="width: 50%;">
+        <h2>Booking feedback</h2>
+
+        <form asp-action="HandleFeedback" asp-controller="Review" method="post">
+            <div class="form-group">
+                <label asp-for="Comment">Comment about you booking experience</label>
+                <textarea asp-for="Comment" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Rating:</label>
+                <div class="rating" onmouseout="resetSmileys()">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                            <span class="smiley" onmouseover="highlightSmileys(@i)" onclick="rate(@i)">&#128512;</span>
+                    }
+                    <input type="hidden" id="rating" name="Number" />
+                </div>
+                <span id="rating-text" class="text-muted"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Send Feedback</button>
+        </form>
+
+        <script>
+            let currentRating = 0;
+
+            function highlightSmileys(smileyNumber) {
+                for (let i = 1; i <= smileyNumber; i++) {
+                    document.querySelector('.rating').children[i - 1].style.color = 'orange';
+                }
+                for (let i = smileyNumber + 1; i <= 5; i++) {
+                    document.querySelector('.rating').children[i - 1].style.color = 'black';
+                }
+                document.getElementById('rating-text').textContent = smileyNumber + ' smiley(s)';
+            }
+
+            function resetSmileys() {
+                highlightSmileys(currentRating);
+            }
+
+            function rate(smileyNumber) {
+                document.getElementById('rating').value = smileyNumber;
+                currentRating = smileyNumber;
+            }
+        </script>
+          <script>
+        document.getElementById('feedbackForm').onsubmit = function (event) {
+            event.preventDefault(); 
+
+           
+            var feedbackData = {
+                Comment: document.getElementById('Comment').value,
+                Number: document.getElementById('rating').value
+            };
+
+            
+            fetch('/Review/HandleFeedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(feedbackData)
+            })
+            .then(response => response.json())
+            .then(data => {
+               
+                console.log(data);
+                alert('Feedback sent successfully!');
+            })
+            .catch(error => {
+               
+                console.error('Error:', error);
+                alert('Failed to send feedback. Please try again later.');
+            });
+        };
+    </script>
+
+        <style>
+            .rating {
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            .smiley {
+                margin-right: 10px;
+                cursor: pointer;
+            }
+        </style>
+    </div> 
+    <div style="width: 50%;">
+        <img src="~/images/FeedbackImage.png" class="img-thumbnail"  />
+
+    </div>
+</div>
+
