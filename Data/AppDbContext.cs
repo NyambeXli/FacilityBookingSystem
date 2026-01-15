@@ -1,4 +1,5 @@
-﻿using UfsConnectBook.Models;
+//AppDbContext
+using UfsConnectBook.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UfsConnectBook.Models.Entities;
@@ -17,3 +18,4 @@ namespace UfsConnectBook.Data
         public DbSet<Models.Entities.Facility> Facilities { get; set; }
     }
 }
+
