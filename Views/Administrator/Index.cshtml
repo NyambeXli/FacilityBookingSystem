@@ -1,0 +1,33 @@
+﻿@model IEnumerable<AppUser>
+@{
+    ViewData["Title"] = "Admin | Users";
+}
+<h4>Manager Users</h4>
+<a asp-action="CreateManager" asp-controller="Administrator" class="btn btn-primary">Create User</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Staff Number</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Name @user.Surname</td>
+                <td>@user.Email</td>
+                <td>@user.Identity</td>
+                <td>
+                    Manager
+                </td>
+                <td>
+                    <a asp-action="DeleteManagerUser" asp-controller="Administrator" asp-route-userId="@user.Id" class="btn btn-secondary">Delete</a>
+                    <a asp-action="EditManagerUser" asp-controller="Administrator" asp-route-userId="@user.Id" class="btn btn-primary">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
