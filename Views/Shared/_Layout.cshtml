@@ -1,0 +1,430 @@
+﻿@{
+    string controller =
+        ViewContext.RouteData.Values["controller"].ToString();
+    string action =
+        ViewContext.RouteData.Values["action"].ToString();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @*Bootstrap*@
+    <link asp-href-include="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    @*Font awesome*@
+    <link asp-href-include="/font-awesome/css/all.min.css" rel="stylesheet" />
+    @*Custom css*@
+    <link asp-href-include="/css/custom.css" rel="stylesheet" />
+    <style>
+        body {
+            background-image: url('/images/Patternn.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .navbar-nav li.nav-item a.nav-link {
+            color: darkorange;
+            transition: all 0.3s;
+            padding: 8px 15px;
+            border: 2px solid transparent;
+            border-radius: 5px;
+        }
+
+
+            .navbar-nav li.nav-item a.nav-link:hover {
+                background-color: lightseagreen;
+                color: deeppink;
+                border-color: deeppink;
+                text-decoration: none;
+            }
+
+
+        .navbar-nav li.nav-item a.nav-link {
+            color: white;
+            transition: color 0.3s;
+        }
+
+            .navbar-nav li.nav-item a.nav-link:hover {
+                color: yellow;
+                text-decoration: underline;
+            }
+
+        .navbar {
+            width: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+</head>
+<body class="container">
+
+    <header>
+        <div class="navbar navbar-expand-lg bg-primary navbar-dark border border-primary rounded-top">
+
+
+            <div class="container-fluid">
+                <a class="navbar-brand">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                        <img src="~/images/ufslogo.png" style="width:100px" />
+                    </a>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#MyNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <a class="navbar-brand" href="/">UFS Connect Book</a>
+                <ul class="navbar-nav navbar-left">
+                    <li class="nav-item">
+                        <a class="nav-link
+                        @(controller == "Home" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")
+                        " asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link
+                     @(controller == "Home" && action == "About" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="Home" asp-action="About">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link
+                     @(controller == "Home" && action == "Help" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="Home" asp-action="Help">Help</a>
+                    </li>
+                </ul>
+
+                <div class="collapse navbar-collapse justify-content-end" id="MyNavbar">
+
+
+                    <ul class="navbar-nav navbar-right">
+
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-link">
+                                Hi, @User.Identity.Name
+                            </li>
+
+                            @if (User.IsInRole("AppUser"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link  @(controller == "Manager" && action == "Facilities" ? "active text-uppercase text-decoration-underline" : "") " asp-controller="Profile" asp-action="ChangePassword">Change Password</a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link   @(controller == "Facility" ? "active text-uppercase text-decoration-underline" : "")  dropdown-toggle" data-bs-toggle="dropdown">Facilities</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-controller="Facility" asp-action="Index">Available facilities</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link   @(controller == "Facility" ? "active text-uppercase text-decoration-underline" : "")  dropdown-toggle" data-bs-toggle="dropdown">Book</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-controller="Booking" asp-action="Create">Add booking</a>
+                                        <a class="dropdown-item" asp-controller="Booking" asp-action="Index">List bookings</a>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link  @(controller == "Manager" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")  " asp-controller="Profile" asp-action="Index" class="fas fa-user text-white">My Profile</a>
+                                </li>
+                                <li class="nav-item">
+                                   
+                                    <span class="nav-link">
+                                        <a asp-controller="Profile" asp-action="Notification" class="fas fa-bell">
+                                            @if (TempData["NewNotification"] != null && (bool)TempData["NewNotification"])
+                                            {
+                                                <span class="badge badge-danger">1</span>
+                                            }
+                                        </a>
+                                    </span>
+                                </li>
+
+                            }
+
+                            @if (User.IsInRole("Incharge"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Incharge" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="InCharge" asp-action="Index">Booking Details</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Manager" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="InChargeProfile" asp-action="Index" class="fa fa-user text-white">My Profile</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Manager"))
+                            {
+
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Manager" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="Manager" asp-action="Index">Incharge Users</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Manager" && action == "Bookings" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="Manager" asp-action="Bookings">Manage Bookings</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Manager" && action == "Facilities" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="Manager" asp-action="ChangePasswordManager">Change Password</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link
+                        @(controller == "Facility" ? "active text-uppercase text-decoration-underline" : "")
+                        dropdown-toggle" data-bs-toggle="dropdown">Manage Facilities</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-controller="Facility" asp-action="Create">+ Facility</a>
+                                        <a class="dropdown-item" asp-controller="Manager" asp-action="Facilities">View, Edit,Delete Facility</a>
+                                    </div>
+                                </li>
+@*                                <li class="nav-item dropdown">
+                                    <a class="nav-link
+                        @(controller == "Facility" ? "active text-uppercase text-decoration-underline" : "")
+                        dropdown-toggle" data-bs-toggle="dropdown">Review</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-controller="Manager" asp-action="Review">Reviews</a>
+                                        <a class="dropdown-item" asp-controller="Manager" asp-action="Facilities">Ratings</a>
+                                    </div>
+                                </li>*@
+
+                         <li class="nav-item dropdown">
+                                    <a class="nav-link
+                        @(controller == "Facility" ? "active text-uppercase text-decoration-underline" : "")
+                        dropdown-toggle" data-bs-toggle="dropdown">Payments</a>
+                                    <div class="dropdown-menu">
+                                        @*<a class="dropdown-item" asp-controller="Manager" asp-action="UsersWithPayments">Users without payments</a>*@
+                                        <a class="dropdown-item" asp-controller="Manager" asp-action="UsersWithoutPayments">Users with payments</a>
+                                    </div>
+                                </li>
+
+
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Administrator" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="Administrator" asp-action="Index">Manage securities</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Administrator" && action == "Bookings" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="Manager" asp-action="Bookings">View Bookings</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Administrator" && action == "Users" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="Administrator" asp-action="Users">View AppUsers</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Administrator" && action == "Incharge" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="Administrator" asp-action="Incharge">View Incharge</a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link
+                        @(controller == "Facility" ? "active text-uppercase text-decoration-underline" : "")
+                        dropdown-toggle" data-bs-toggle="dropdown">Manage Facilities</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-controller="Facility" asp-action="Create">Add Facility</a>
+                                        <a class="dropdown-item" asp-controller="Manager" asp-action="Facilities">View, Update, Delete</a>
+                                    </div>
+                                </li>
+                            }
+                            @if (User.IsInRole("InchargeG"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link
+                         @(controller == "Administrator" && action == "Incharge" ? "active text-uppercase text-decoration-underline" : "")
+                         " asp-controller="InCharge" asp-action="BookingHistory">Gym booking history</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Manager" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="InChargeProfile" asp-action="Index" class="fa fa-user text-white">My Profile</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("InchargeP"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link
+                         @(controller == "Administrator" && action == "Incharge" ? "active text-uppercase text-decoration-underline" : "")
+                         " asp-controller="InCharge" asp-action="BookingHistory">Parking booking history</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Manager" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="InChargeProfile" asp-action="Index" class="fa fa-user text-white">My Profile</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("InchargeL"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link
+                         @(controller == "Administrator" && action == "Incharge" ? "active text-uppercase text-decoration-underline" : "")
+                         " asp-controller="InCharge" asp-action="BookingHistory">Laundry booking history</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Manager" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="InChargeProfile" asp-action="Index" class="fa fa-user text-white">My Profile</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("InchargeS"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link
+                         @(controller == "Administrator" && action == "Incharge" ? "active text-uppercase text-decoration-underline" : "")
+                         " asp-controller="InCharge" asp-action="BookingHistory">Laundry booking history</a>
+                                </li>
+                        <li class="nav-item">
+                                    <a class="nav-link
+                     @(controller == "Manager" && action == "Index" ? "active text-uppercase text-decoration-underline" : "")
+                    " asp-controller="InChargeProfile" asp-action="Index" class="fa fa-user text-white">My Profile</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <div>
+                    <ul class="navbar-nav navbar-right">
+                        <li class="nav-item me-3 me-lg-0 dropdown">
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="manageAccount">Manage Account</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Login">Log In</a>
+                                </li>
+                            </ul>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form asp-action="Logout" asp-controller="Account" method="post">
+                                    <input class="nav-link" value="SignOut" type="submit" style="background-color: #ff5733; color: white;">
+                                </form>
+                            }
+                            else
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link
+                         @(controller == "Account" && action == "Login" ? "active text-uppercase text-decoration-underline" : "")
+                         "
+                               asp-controller="Account" asp-action="Login">Log In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link
+                         @(controller == "Account" && action == "Register" ? "active text-uppercase text-decoration-underline" : "")
+                        "
+                               asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            }
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </header>
+    <div>
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-1"></i>
+                @ViewBag.Message
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @RenderBody()
+    </div>
+
+    <br />
+    <footer class="bg-black text-center text-white">
+        <!-- Grid container -->
+        <div class="container p-4 pb-0">
+            <!-- Section: Form -->
+            <section class="">
+                <form action="">
+                    <!--Grid row-->
+                    <div class="row d-flex justify-content-center">
+                        <!--Grid column-->
+                        <div class="col-auto">
+                            <p class="pt-2">
+                                <strong>Sign up for our newsletter</strong>
+                            </p>
+                        </div>
+                        <!--Grid column-->
+                        <!--Grid column-->
+                        <div class="col-md-5 col-12">
+                            <!-- Email input -->
+                            <div class="form-outline form-white mb-4">
+                                <input type="email" id="EmailAdress" class="form-control" />
+                                <label class="form-label" for="EmailAdress">Email address</label>
+                            </div>
+                        </div>
+                        <!--Grid column-->
+                        <!--Grid column-->
+                        <div class="col-auto">
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-outline-light mb-4">
+                                Subscribe
+                            </button>
+                        </div>
+                        <!--Grid column-->
+                    </div>
+                    <!--Grid row-->
+                </form>
+            </section>
+            <!-- Section: Form -->
+        </div>
+        <!-- Grid container -->
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            <p> &copy; @DateTime.Now.Year - Ufs Connect Book</p>
+            <a class="text-white" href="https://www.ufs.ac.za/">UfsConnect Book Pty Ltd</a>
+        </div>
+
+        <a href="https://www.facebook.com">
+            <span style="color:#ffc0cb">
+                <i class="fa-brands fa-facebook fa-1x"></i>
+            </span>
+        </a>
+
+
+
+        <a href="https://www.instagram.com">
+            <span style="color:#ffc0cb">
+                <i class="fa-brands fa-instagram fa-1x"></i>
+            </span>
+        </a>
+
+
+
+        <a href="https://www.twitter.com">
+            <span style="color:#ffc0cb">
+                <i class="fa-brands fa-twitter fa-1x"></i>
+            </span>
+        </a>
+
+        <!-- Copyright -->
+
+
+    </footer>
+
+    <script asp-src-include="/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
