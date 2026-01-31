@@ -32,3 +32,4 @@ Lindele Xolani Nyambe
 LinkedIn: https://www.linkedin.com/in/lindelexo-nyambe
 Email: lxnyambe@gmail.com
 Role: Software engineer
+Project Video demonstration: https://www.loom.com/share/3ad43822411a4fb0a98eb6c625141ee0
