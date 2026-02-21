@@ -94,14 +94,6 @@ namespace UfsConnectBook.Controllers
 
             return RedirectToAction(nameof(Index),
                 new { Message = $"Your new Booking has been made successful but has not yet been approved, Please Make booking payments" });
-            //var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
-            //var pdfContent = $"Current Date: {currentDate}";
-
-            //// Convert the PDF content to bytes
-            //var pdfBytes = Encoding.UTF8.GetBytes(pdfContent);
-
-            //// Return the PDF as a file
-            //return File(pdfBytes, "application/pdf", "CurrentDate.pdf");
         }
 
         public IActionResult Details(int bookingID)
@@ -163,7 +155,6 @@ namespace UfsConnectBook.Controllers
                 var currency = "Zar";
                 var successUrl = Url.Action("Success", "Booking", null, Request.Scheme);
                 var cancelUrl = Url.Action("Cancel", "Booking", null, Request.Scheme);
-                //StripeConfiguration.ApiKey = _Settings.SecretKey;
 
                 var options = new SessionCreateOptions
                 {
@@ -231,4 +222,5 @@ namespace UfsConnectBook.Controllers
         }
     }
 }
+
 
