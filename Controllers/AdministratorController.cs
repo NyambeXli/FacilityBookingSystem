@@ -141,27 +141,10 @@ namespace UfsConnectBook.Controllers
         }
         public IActionResult GeneratePdfReport()
         {
-
             var pdfContent = "Report generated";
-
-            // Convert the PDF content to bytes
             var pdfBytes = Encoding.UTF8.GetBytes(pdfContent);
-
-            // Return the PDF as a file for download
             return File(pdfBytes, "application/pdf", "Report.pdf");
 
-            //// Get data for the PDF report (replace this with your actual data retrieval logic)
-            //var reportData = "Sample PDF Report Content"; // Replace this with your actual report content
-
-            //// Generate PDF from HTML content
-            //var pdfBytes = _pdfGenerator.GeneratePdf(reportData);
-
-            //// Check if pdfBytes is null or empty
-            //if (pdfBytes == null || pdfBytes.Length == 0)
-            //{
-            //    // Handle the case where PDF generation fails
-            //    return Content("Error generating PDF");
-            //}
         }
         public IActionResult GenerateBookingHistoryReport()
         {
@@ -169,8 +152,6 @@ namespace UfsConnectBook.Controllers
                 .Where(s => s.Status != "Canceled")
                 .OrderByDescending(s => s.BookingDate)
                 .ToList();
-
-            // Pass the bookings data to the Report view
             return View("GenerateBookingHistoryReport", bookings);
         }
         [HttpGet]
@@ -287,3 +268,4 @@ namespace UfsConnectBook.Controllers
 
     }
 }
+
