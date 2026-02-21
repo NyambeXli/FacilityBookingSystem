@@ -45,16 +45,6 @@ namespace UfsConnectBook.Controllers
             appDbContext.SaveChanges();
             return RedirectToAction(nameof(Index), new { Message = $"The booking for {_booking.userEmail} was approved and is now in progress, The status is now APPROVED!" });
         }
-        //public IActionResult BookingHistory()
-        //{
-        //    var bookings = appDbContext.Bookings
-        //        .Where(s => s.Status != "Canceled")
-        //        .OrderByDescending(s => s.BookingDate)
-        //        .ToList();
-
-        //    // Pass the bookings data to the Report view
-        //    return View("BookingHistory", bookings);
-        //}
 
         public async Task<IActionResult> BookingHistoryAsync()
         {
@@ -95,3 +85,4 @@ namespace UfsConnectBook.Controllers
 
     }
 }
+
