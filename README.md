@@ -1,7 +1,6 @@
-cat <<EOF > README.md
 # 🏛️ UfsConnectBook - Facility Booking System
 
-A robust, full-stack web application built with ASP.NET Core MVC designed to streamline the process of booking university facilities. This system implements a clean architecture, secure authentication, and modern styling.
+A robust, full-stack web application built with **ASP.NET Core MVC** designed to streamline the process of booking university facilities. This system implements a clean architecture, secure authentication, and modern styling.
 
 ---
 
@@ -31,7 +30,7 @@ A robust, full-stack web application built with ASP.NET Core MVC designed to str
 
 ## 📂 Project Structure
 
-This project follows a professional Model-View-Controller (MVC) pattern:
+This project follows a professional **Model-View-Controller (MVC)** pattern:
 
 * **Controllers/**: Handles application logic and user input.
 * **Models/**: Contains data structures and database entities.
@@ -43,17 +42,16 @@ This project follows a professional Model-View-Controller (MVC) pattern:
 
 ## ⚙️ Local Setup
 
-1.  **Clone the repository:**
-    git clone https://github.com/NyambeXli/FacilityBookingSystem.git
-    
-2.  **Update Database:** Ensure your connection string is set in appsettings.json, then run:
-    dotnet ef database update
-    
-3.  **Run the application:**
-    dotnet run
+1. **Clone the repository:**
+   `git clone https://github.com/NyambeXli/FacilityBookingSystem.git`
+
+2. **Update Database:** Ensure your connection string is set in `appsettings.json`, then run:
+   `dotnet ef database update`
+
+3. **Run the application:**
+   `dotnet run`
 
 ---
 
 ## 👤 Author
-**NyambeXli**
-EOF
+**Lindele Xololani Nyambe**
