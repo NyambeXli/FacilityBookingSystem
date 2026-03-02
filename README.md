@@ -54,4 +54,4 @@ This project follows a professional **Model-View-Controller (MVC)** pattern:
 ---
 
 ## 👤 Author
-**Lindele Xololani Nyambe**
+**Lindele Xolani Nyambe**
