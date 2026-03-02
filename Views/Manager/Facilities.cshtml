@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Facility>
+@{
+    ViewData["Title"] = "Facilities";
+}
+<h4>Available Facilities</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Facility ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var facility in Model)
+        {
+            <tr>
+                <td>@facility.FacilityId</td>
+                <td>@facility.Name</td>
+                <td>@facility.Category!.Name</td>
+                <td>
+                    <a asp-controller="Facility" asp-action="Details" asp-route-FacilityId="@facility.FacilityId" class="text-primary fa fa-eye"></a>
+                    <a asp-controller="Facility" asp-action="Edit" asp-route-FacilityId="@facility.FacilityId" class="text-warning fa fa-edit"></a>
+                    <a asp-controller="Facility" asp-action="Delete" asp-route-FacilityId="@facility.FacilityId" class="text-danger fa fa-delete-left"></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Booking>
+@{
+    ViewData["Title"] = "Bookings";
+}
+<h4>Bookings</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Facility</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.StartTime.ToShortTimeString()</td>
+                <td>@booking.EndTime.ToShortTimeString()</td>
+                <td>@booking.Facility!.Name</td>
+                <td>@booking.BookingDate</td>
+                <td>@booking.Status.ToString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

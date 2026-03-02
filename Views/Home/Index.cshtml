@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+@{
+        ViewBag.Title = "Home page";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background-attachment: fixed;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .bg-light:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+    }
+
+    .card-definition {
+        margin: 20px auto;
+        max-width: 600px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .facility-card {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div>
+    <div id="Title" class="bg-secondary pt-4 pb-4 mt-1 rounded-2 shadow">
+        <div class="text-center text-light text-sm-start text-md-center display-4">UFS Facility Booking System</div>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="card-body text-center">
+        <h3 class="fw-bold" id="welcomeText">Welcome to the Ufs Connect Book system</h3>
+    </div>
+
+    <br />
+    <div id="Facilities" class="container">
+        <h4 class="mb-4">Different types of campus facilities</h4>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="facility-card bg-light m-1 pb-3 text-center rounded">
+                    <img src="~/images/ParkingSlots.jpg" class="img-thumbnail mt-2 w-75" style="height: 150px; object-fit: cover;" />
+                    <h5 class="fst-italic mt-2">Parking Spaces</h5>
+                    <p class="px-2">Secure your parking slot NOW!</p>
+                    <div class="ratings text-warning">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="facility-card bg-light m-1 pb-3 text-center rounded">
+                    <img src="~/images/LaundryR.jpg" class="img-thumbnail mt-2 w-75" style="height: 150px; object-fit: cover;" />
+                    <h5 class="fst-italic mt-2">Laundry Facilities</h5>
+                    <p class="px-2">Book in advance. SECURE YOUR SPACE!</p>
+                    <div class="ratings text-warning">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="facility-card bg-light m-1 pb-3 text-center rounded">
+                    <img src="~/images/LibraryRoom.jpg" class="img-thumbnail mt-2 w-75" style="height: 150px; object-fit: cover;" />
+                    <h5 class="fst-italic mt-2">Library Discussion Room</h5>
+                    <p class="px-2">Enlighten your education.</p>
+                    <div class="ratings text-warning">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="facility-card bg-light m-1 pb-3 text-center rounded">
+                    <img src="~/images/Gym.jpg" class="img-thumbnail mt-2 w-75" style="height: 150px; object-fit: cover;" />
+                    <h5 class="fst-italic mt-2">Gym Facilities</h5>
+                    <p class="px-2">Get yourself healthy.</p>
+                    <div class="ratings text-warning">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    var welcomeText = document.getElementById("welcomeText");
+    var fullText = welcomeText.innerText;
+    var words = fullText.split(' ');
+    welcomeText.innerText = '';
+
+    function displayWords() {
+        words.forEach(function (word, index) {
+            setTimeout(function () {
+                welcomeText.innerText += word + ' ';
+            }, index * 500);
+        });
+    }
+
+    displayWords();
+</script>
+
+</html>

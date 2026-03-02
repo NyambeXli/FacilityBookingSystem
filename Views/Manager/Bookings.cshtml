@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Booking>
+@{}
+
+   @* ViewData["Title"] = "Bookings";*@
+   <style>
+           .payment-button {
+        background-color: #0000FF;
+        border: none; 
+        color: white;
+        padding: 15px 32px; 
+        text-align: center; 
+        text-decoration: none;
+        display: inline-block; 
+        font-size: 15px; 
+        margin: 4px 2px; 
+        cursor: pointer; 
+        border-radius: 25px; 
+        transition: background-color 0.3s, transform 0.3s; 
+    }
+
+      
+        .payment-button:hover {
+            background-color: #ffc0cb;
+            transform: scale(1.05);
+        }
+</style>
+
+
+<div style="display: flex;">
+    <div style="width: 30%;">
+        <img src="~/images/Booking.png" alt="Bookings Image" style="width: 100%;" />
+    </div>
+    <div style="width: 70%;">
+<h4>Booking History</h4>
+<p> facility booking history</p>
+<table class="table tabletable-hover table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Facility</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>User</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.BookingDate</td>
+                <td>@booking.StartTime.ToShortTimeString()</td>
+                <td>@booking.EndTime.ToShortTimeString()</td>
+                <td>@booking.Facility!.Name</td>
+                <td>
+                    @{
+                        var dur = booking.EndTime - booking.StartTime;
+                    } @dur
+                </td>
+                <td>@booking.Status.ToString()</td>
+                <td>@booking.userEmail.ToString()</td>
+                <td>
+                    @if (booking.Status == "Pending")
+                    {
+                        @if (User.IsInRole("Manager"))
+                                {
+                                    <a class="btn btn-success" asp-action="Approve" asp-route-bookingId="@booking.Id">Approve</a>
+                                
+                        }
+                    }
+                </td>
+
+               @*  <td>
+                       <a class="btn btn-success" asp-action="GeneratePdfReport" asp-controller="Administrator"> report</a>
+                </td>*@
+
+
+            </tr>
+        }
+    </tbody>
+
+  
+</table>
+             
+          @*<a class="btn btn-success" asp-action="GenerateBookingHistoryReport" asp-controller="Administrator"> Generate booking Report</a>*@
+          @if (User.IsInRole("Admin"))
+        {
+            <form asp-controller="Administrator" asp-action="GenerateBookingHistoryReport" method="get">
+                <button type="submit" class="payment-button">Generate booking Report</button>
+            </form>
+        }
+
+           
+ </div>
+</div>

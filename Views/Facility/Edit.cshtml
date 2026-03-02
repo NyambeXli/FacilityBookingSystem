@@ -1,0 +1,26 @@
+﻿@model Facility
+@{
+    ViewData["Title"] = "Edit Facility";
+}
+<h4>Edit Booking</h4>
+
+<form asp-action="Edit" method="post">
+    <div class="text-danger" asp-validation-summary="All"></div>
+    <input asp-for=FacilityId type="hidden" />
+    <div class="form-group">
+        <label>Category</label>
+        <select asp-items="@ViewBag.CategoryId" asp-for="CategoryId" class="form-control">
+            <option>--- Select Category ---</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a asp-action="Facilities" asp-controller="Manager"> Back To List</a>
+    </div>
+</form>
+

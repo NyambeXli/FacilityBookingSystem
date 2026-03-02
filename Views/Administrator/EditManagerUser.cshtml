@@ -1,0 +1,41 @@
+﻿@model EditUserModel
+@{
+    ViewData["Title"] = "Admin | Edit Manager User";
+}
+<h4>Edit Manager User</h4>
+
+<div class="form">
+    <form asp-action="EditManagerUser" asp-controller="Administrator" method="post" role="form">
+        <div class="text-danger" asp-validation-summary="All"></div>
+        <input type="hidden" asp-for="UserId" />
+
+        <div class="form-group">
+            <label asp-for="Name">First Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Surname">Last Name</label>
+            <input asp-for="Surname" class="form-control" />
+            <span asp-validation-for="Surname" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="EmailAddress">Email Address</label>
+            <input asp-for="EmailAddress" class="form-control" />
+            <span asp-validation-for="EmailAddress" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Identification">UFS Student Number</label>
+            <input asp-for="Identification" class="form-control" />
+            <span asp-validation-for="Identification" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+        <br /> <small class="text-center"><a asp-action="Index">Back To List</a></small>
+    </form>
+</div>
