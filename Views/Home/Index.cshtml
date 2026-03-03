@@ -103,14 +103,14 @@
 
 <script>
     var welcomeText = document.getElementById("welcomeText");
-    var fullText = welcomeText.innerText;
+    var fullText = "Engineered by Lindele Xolani Nyambe";
     var words = fullText.split(' ');
-    welcomeText.innerText = '';
+    welcomeText.textContent = '';
 
     function displayWords() {
         words.forEach(function (word, index) {
             setTimeout(function () {
-                welcomeText.innerText += word + ' ';
+                welcomeText.textContent += word + (index < words.length - 1 ? ' ' : '');
             }, index * 500);
         });
     }
