@@ -8,22 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
-    // Email uniqueness validation
     options.User.RequireUniqueEmail = true;
-
-    // Password length validation
-   
-    options.Password.RequiredLength = 6; // Minimum password length required
-  
-
+    options.Password.RequiredLength = 6;
 })
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
@@ -37,14 +30,12 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
 
 app.UseStaticFiles();
-app.UseRouting();
 
 app.MapControllerRoute(
     name: "default",
