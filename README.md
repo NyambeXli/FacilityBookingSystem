@@ -1,58 +1,38 @@
 # 🏛️ ConnectBook - Facility Booking System
 
 🔗 **Live Demo:** [https://facilitybookingsystem.onrender.com](https://facilitybookingsystem.onrender.com)  
-*Please allow up to 20 seconds for the demo to wake up(Load and open).*
-
-A robust, full-stack web application built with **ASP.NET Core MVC** designed to streamline the process of booking university facilities. This system implements a clean architecture, secure authentication, and modern styling.
+*Please allow 30–60s for the demo to wake up.*
 
 ---
 
-## 🛠️ Tech Stack
+## 🌟 What is ConnectBook?
 
-| Layer | Technology |
-| :--- | :--- |
-| **Backend** | .NET 7.0 (ASP.NET Core MVC) |
-| **Database** | Entity Framework Core (SQL Server) |
-| **Security** | ASP.NET Core Identity (Role-based Access) |
-| **Frontend** | HTML5, SCSS, JavaScript |
-| **Payments** | Stripe API Integration |
-| **Deployment** | Railway.app |
+ConnectBook is a web application created to **make booking university facilities easy and efficient**. 
+Students and staff can see which rooms or venues are available, book them without conflicts, and even pay for certain bookings if required. The goal is to **save time, prevent double bookings, and simplify facility management**.
 
 ---
 
 ## ✨ Key Features
 
-* **User Authentication:** Secure Login/Register using ASP.NET Identity.
-* **Facility Management:** Dynamic listing and availability tracking for university venues.
-* **Booking Engine:** Real-time booking logic with conflict prevention.
-* **Payment Integration:** Seamless checkout experience powered by Stripe.
-* **Modern UI:** Responsive design crafted with SCSS for professional styling.
-* **Document Generation:** Support for PDF/Excel exports (via NPOI/DinkToPdf).
+* Secure user login and registration  
+* View available university facilities and make bookings  
+* Real-time booking conflict prevention  
+* Payment integration for bookings (Stripe)  
+* Generate PDF or Excel reports for bookings  
+* Responsive and clean user interface  
 
 ---
 
-## 📂 Project Structure
+## 🛠️ Technical Skills Used
 
-This project follows a professional **Model-View-Controller (MVC)** pattern:
+This project was built using:  
 
-* **Controllers/**: Handles application logic and user input.
-* **Models/**: Contains data structures and database entities.
-* **Views/**: UI templates rendered to the user.
-* **Data/**: Database context and migrations.
-* **wwwroot/**: Static files (compiled CSS, JS, and Images).
-
----
-
-## ⚙️ Local Setup
-
-1. **Clone the repository:**
-   `git clone https://github.com/NyambeXli/FacilityBookingSystem.git`
-
-2. **Update Database:** Ensure your connection string is set in `appsettings.json`, then run:
-   `dotnet ef database update`
-
-3. **Run the application:**
-   `dotnet run`
+- **Backend:** ASP.NET Core MVC (.NET 7.0)  
+- **Database:** Entity Framework Core with SQL Server  
+- **Frontend:** HTML, SCSS, JavaScript  
+- **Authentication:** ASP.NET Identity  
+- **Payment Integration:** Stripe API  
+- **Deployment:** Railway.app  
 
 ---
 
