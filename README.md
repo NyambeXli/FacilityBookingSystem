@@ -1,7 +1,7 @@
 # 🏛️ ConnectBook - Facility Booking System
 
 🔗 **Live Demo:** [https://facilitybookingsystem.onrender.com](https://facilitybookingsystem.onrender.com)  
-*Please allow 30–60s for the demo to wake up.*
+*Please allow up to 20s for the demo to wake up.*
 
 ---
 
