@@ -1,61 +1,75 @@
-﻿@model Booking
+@model Booking
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Booking Details";
 }
+
 <style>
     body {
         background-image: url('/images/Booking.png');
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .details-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 700px;
+        margin: 50px auto;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    h4 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    dl.row dt {
+        font-weight: 600;
+    }
+
+    dl.row dd {
+        margin-bottom: 10px;
+    }
+
+    a.btn-link {
+        display: inline-block;
+        margin-top: 15px;
+        color: #4CAF50;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    a.btn-link:hover {
+        text-decoration: underline;
     }
 </style>
-<h4>View Booking</h4>
-<div>
-    <h4>Booking</h4>
+
+<div class="details-card">
+    <h4>Booking Details</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BookingDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BookingDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StartTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Model.StartTime.ToShortTimeString()
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EndTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Model.EndTime.ToShortTimeString()
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FacilityId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Facility!.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Duration)
-        </dt>
-        <dd class="col-sm-10">
-            @{
-                var dur = Model.EndTime - Model.StartTime;
-            }
-            @dur
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Status.ToString()
-        </dd>
+        <dt class="col-sm-4">Booking Date</dt>
+        <dd class="col-sm-8">@Model.BookingDate?.ToString("dd MMM yyyy HH:mm")</dd>
+
+        <dt class="col-sm-4">Start Time</dt>
+        <dd class="col-sm-8">@Model.StartTime.ToShortTimeString()</dd>
+
+        <dt class="col-sm-4">End Time</dt>
+        <dd class="col-sm-8">@Model.EndTime.ToShortTimeString()</dd>
+
+        <dt class="col-sm-4">Facility</dt>
+        <dd class="col-sm-8">@Model.Facility?.Name</dd>
+
+        <dt class="col-sm-4">Duration</dt>
+        <dd class="col-sm-8">@(@Model.EndTime - @Model.StartTime)</dd>
+
+        <dt class="col-sm-4">Status</dt>
+        <dd class="col-sm-8">@Model.Status</dd>
     </dl>
+
+    <a asp-action="Index" class="btn-link">Back to Bookings</a>
 </div>
-<p>
-    <a asp-action="Index">Back to List</a>
-</p>
