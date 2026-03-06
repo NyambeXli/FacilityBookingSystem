@@ -1,4 +1,5 @@
 @model IEnumerable<Booking>
+
 @{
     ViewData["Title"] = "Bookings";
 }
@@ -9,115 +10,85 @@
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        font-family: Arial, sans-serif;
     }
 
-    /* Overlay to make text readable */
-    .overlay {
-        background-color: rgba(0, 0, 0, 0.6); /* semi-transparent black */
-        padding: 20px;
-        border-radius: 10px;
-        color: #fff;
-    }
-
-    h4 {
-        margin-bottom: 20px;
-        color: #fff;
-    }
-
-    .btn-primary {
-        margin-bottom: 20px;
-    }
-
-    table {
-        background-color: rgba(255, 255, 255, 0.9);
-        border-radius: 10px;
-        width: 100%;
-        color: #000;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #007bff;
-        color: #fff;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-
-    td {
-        border-bottom: 1px solid #ddd;
-    }
-
-    a.fa-eye, a.fa-edit {
-        font-size: 18px;
-        margin-right: 10px;
-    }
-
-    .FeedBack-button {
-        background-color: #17a2b8;
+    .payment-button {
+        background-color: #4CAF50;
         border: none;
         color: white;
-        padding: 10px 20px;
-        border-radius: 25px;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        margin: 4px 2px;
         cursor: pointer;
-        margin-top: 10px;
+        border-radius: 25px;
         transition: background-color 0.3s, transform 0.3s;
     }
 
-    .FeedBack-button:hover {
-        background-color: #138496;
+    .payment-button:hover {
+        background-color: #ffc0cb;
         transform: scale(1.05);
     }
 </style>
 
-<div class="overlay">
-    <h4>My Bookings</h4>
+<h4>My Bookings</h4>
+<a asp-action="Create" asp-controller="Booking" class="btn btn-primary"> Book New</a>
 
-    <a asp-action="Create" asp-controller="Booking" class="btn btn-primary">Book New</a>
-
-    <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Facility</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
             <tr>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Facility</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var booking in Model)
-            {
-                <tr>
-                    <td>@booking.StartTime.ToShortTimeString()</td>
-                    <td>@booking.EndTime.ToShortTimeString()</td>
-                    <td>@booking.Facility!.Name</td>
-                    <td>@booking.BookingDate.ToShortDateString()</td>
-                    <td>@booking.Status.ToString()</td>
+                <td>@booking.StartTime.ToShortTimeString()</td>
+                <td>@booking.EndTime.ToShortTimeString()</td>
+                <td>@booking.Facility!.Name</td>
+                <td>@booking.BookingDate</td>
+                <td>@booking.Status.ToString()</td>
+                <td></td>
+                <td>
+                    @if (booking.Status == "Pending")
+                    {
+                        <form asp-controller="Booking" asp-action="Payment" method="get">
+                            <button type="submit" class="payment-button">Make Payments</button>
+                        </form>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-bookingID="@booking.Id" class="text-primary fa fa-eye"></a>
+                </td>
+                @if (booking.Status == "Pending")
+                {
                     <td>
-                        <a asp-action="Details" asp-route-bookingID="@booking.Id" class="text-primary fa fa-eye"></a>
-
-                        @if (booking.Status == "Pending")
-                        {
-                            <a asp-action="Edit" asp-route-bookingID="@booking.Id" class="text-info fa fa-edit"></a>
-
-                            <form asp-controller="Booking" asp-action="ConfirmCancel" asp-route-bookingID="@booking.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
-                                <button type="submit" class="text-danger fa fa-delete-left" style="background:none;border:none;"></button>
-                            </form>
-                        }
+                        <a asp-action="Edit" asp-route-bookingID="@booking.Id" class="text-info fa fa-edit"></a>
                     </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    @* <td>
+                        <a asp-action="Cancel" asp-route-bookingID="@booking.Id" class="text-danger fa fa-delete-left"></a>
+                    </td>*@
+                    <td>
+                        <form asp-controller="Booking" asp-action="ConfirmCancel" asp-route-bookingID="@booking.Id" method="post" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                            <button type="submit" class="text-danger fa fa-delete-left"></button>
+                        </form>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
 
     <form asp-controller="Booking" asp-action="FeedBack" method="get">
         <button type="submit" class="FeedBack-button">Feedback</button>
     </form>
-</div>
+</table>
