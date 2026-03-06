@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,7 +8,6 @@ using Stripe;
 using Stripe.Checkout;
 using Microsoft.Extensions.Options;
 using UfsConnectBook.Models;
-using System.Text;
 
 namespace UfsConnectBook.Controllers
 {
@@ -20,16 +19,14 @@ namespace UfsConnectBook.Controllers
         private readonly IRepositoryWrapper wrapper;
         private readonly StripeSettings _Settings;
 
-
-        public BookingController(AppDbContext appDbContext, UserManager<AppUser>
-            userManager, IRepositoryWrapper wrapper, IOptions<StripeSettings> settings)
+        public BookingController(AppDbContext appDbContext, UserManager<AppUser> userManager, IRepositoryWrapper wrapper, IOptions<StripeSettings> settings)
         {
             this.appDbContext = appDbContext;
             this.userManager = userManager;
             this.wrapper = wrapper;
             _Settings = settings.Value;
-
         }
+
         [HttpPost]
         public IActionResult ConfirmCancel(int bookingID)
         {
@@ -40,29 +37,32 @@ namespace UfsConnectBook.Controllers
                 return NotFound();
             }
 
-
             booking.Status = "Canceled";
             appDbContext.SaveChanges();
 
-            return RedirectToAction(nameof(Index), new { Message = $"Booking was canceled successfully." });
+            return RedirectToAction(nameof(Index), new { Message = "Booking was canceled successfully." });
         }
+
         public IActionResult Index(string Message)
         {
-
             if (!string.IsNullOrWhiteSpace(Message))
                 ViewBag.Message = Message;
 
-            var booking = appDbContext.Bookings.Where(s => s.userEmail!
-            .Equals(User.Identity.Name) && s.Status != "Canceled").OrderByDescending(s => s.Id).ToList();
-            for (int i = 0; i < booking.Count(); i++)
+            var booking = appDbContext.Bookings
+                .Where(s => s.userEmail == User.Identity.Name && s.Status != "Canceled")
+                .OrderByDescending(s => s.Id)
+                .ToList();
+
+            for (int i = 0; i < booking.Count; i++)
             {
                 booking[i].Facility = appDbContext.Facilities.Find(booking[i].FacilityId);
             }
+
             return View(booking);
         }
+
         public IActionResult Create()
         {
-
             PopulateDDL();
             return View();
         }
@@ -70,7 +70,6 @@ namespace UfsConnectBook.Controllers
         [HttpPost]
         public IActionResult Create(Booking booking)
         {
-
             if (!ModelState.IsValid)
             {
                 PopulateDDL();
@@ -85,77 +84,81 @@ namespace UfsConnectBook.Controllers
             }
 
             booking.BookingDate = DateTime.Now;
-            booking.Duration = new TimeSpan();
-            booking.userEmail = User.Identity.Name;
+            booking.Duration = booking.EndTime - booking.StartTime;
+            booking.userEmail = User.Identity?.Name;
             booking.Status = "Pending";
+
             appDbContext.Bookings.Add(booking);
             appDbContext.SaveChanges();
 
-            return RedirectToAction(nameof(Index),
-                new { Message = $"Your new Booking has been made successful but has not yet been approved, Please Make booking payments" });
-           
+            return RedirectToAction(nameof(Index), new { Message = "Your new Booking has been made successful but has not yet been approved, Please Make booking payments" });
         }
 
         public IActionResult Details(int bookingID)
         {
-
-            var booking = appDbContext.Bookings.Find(bookingID)!;
+            var booking = appDbContext.Bookings.Find(bookingID);
             booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
             return View(booking);
         }
+
         public IActionResult Edit(int bookingID)
         {
-            var booking = appDbContext.Bookings.Find(bookingID)!;
+            var booking = appDbContext.Bookings.Find(bookingID);
             booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
             PopulateDDL();
             return View(booking);
         }
+
         [HttpPost]
         public IActionResult Edit(Booking booking)
         {
-
             if (!ModelState.IsValid)
             {
                 PopulateDDL();
                 return View(booking);
             }
+
+            booking.Duration = booking.EndTime - booking.StartTime;
+
             appDbContext.Bookings.Update(booking);
             appDbContext.SaveChanges();
 
-            return RedirectToAction(nameof(Index),
-                new { Message = $"Booking Updated Successfully.." });
-
+            return RedirectToAction(nameof(Index), new { Message = "Booking Updated Successfully.." });
         }
+
         public IActionResult Cancel(int bookingID)
         {
-
-            var booking = appDbContext.Bookings.Find(bookingID)!;
+            var booking = appDbContext.Bookings.Find(bookingID);
             booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
             return View(booking);
         }
+
         [HttpPost]
         public IActionResult Cancel(Booking booking)
         {
-
-            var _booking = appDbContext.Bookings.Find(booking.Id)!;
+            var _booking = appDbContext.Bookings.Find(booking.Id);
             _booking.Status = "Canceled";
             appDbContext.Update(_booking);
             appDbContext.SaveChanges();
-            return RedirectToAction(nameof(Index),
-            new { Message = $"Booking was deleted Successfully.." });
+
+            return RedirectToAction(nameof(Index), new { Message = "Booking was deleted Successfully.." });
         }
+
         private void PopulateDDL()
         {
             ViewBag.FacilityId = new SelectList(appDbContext.Facilities.ToList(), "FacilityId", "Name");
         }
+
         public IActionResult Payment(string amount)
         {
             try
             {
-                var currency = "Zar";
+                var currency = "zar";
+
                 var successUrl = Url.Action("Success", "Booking", null, Request.Scheme);
                 var cancelUrl = Url.Action("Cancel", "Booking", null, Request.Scheme);
-                //StripeConfiguration.ApiKey = _Settings.SecretKey;
+
+                StripeConfiguration.ApiKey = _Settings.SecretKey;
 
                 var options = new SessionCreateOptions
                 {
@@ -164,46 +167,47 @@ namespace UfsConnectBook.Controllers
                         "card"
                     },
                     LineItems = new List<SessionLineItemOptions>
-                {
-                    new SessionLineItemOptions
                     {
-                        PriceData = new SessionLineItemPriceDataOptions
+                        new SessionLineItemOptions
                         {
-                            Currency = currency,
-                          UnitAmount = (long)(100 * 90),
-                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            PriceData = new SessionLineItemPriceDataOptions
                             {
-                                Name = "Booking amount Due",
-                            }
-                        },
-                        Quantity = 1
-                    }
-                },
+                                Currency = currency,
+                                UnitAmount = (long)(100 * 90),
+                                ProductData = new SessionLineItemPriceDataProductDataOptions
+                                {
+                                    Name = "Booking amount Due"
+                                }
+                            },
+                            Quantity = 1
+                        }
+                    },
                     Mode = "payment",
                     SuccessUrl = successUrl,
                     CancelUrl = cancelUrl
                 };
-                var service = new SessionService();
 
+                var service = new SessionService();
                 var session = service.Create(options);
 
                 return Redirect(session.Url);
             }
-            catch (Exception)
+            catch
             {
-
                 return Redirect("/Home/Index");
             }
-
         }
+
         public async Task<IActionResult> Success()
         {
             return View("Success");
         }
-        public IActionResult cancel()
+
+        public IActionResult Cancel()
         {
             return View("Index");
         }
+
         [HttpGet]
         public IActionResult FeedBack()
         {
@@ -219,6 +223,7 @@ namespace UfsConnectBook.Controllers
                 wrapper.Save();
                 return RedirectToAction("Index", "Booking");
             }
+
             return View();
         }
     }
