@@ -33,9 +33,7 @@ namespace UfsConnectBook.Controllers
             var booking = appDbContext.Bookings.Find(bookingID);
 
             if (booking == null)
-            {
                 return NotFound();
-            }
 
             booking.Status = "Canceled";
             appDbContext.SaveChanges();
@@ -48,14 +46,19 @@ namespace UfsConnectBook.Controllers
             if (!string.IsNullOrWhiteSpace(Message))
                 ViewBag.Message = Message;
 
+            var userEmail = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(userEmail))
+                return RedirectToAction("Login", "Account");
+
             var booking = appDbContext.Bookings
-                .Where(s => s.userEmail == User.Identity.Name && s.Status != "Canceled")
+                .Where(s => s.userEmail == userEmail && s.Status != "Canceled")
                 .OrderByDescending(s => s.Id)
                 .ToList();
 
-            for (int i = 0; i < booking.Count; i++)
+            foreach (var item in booking)
             {
-                booking[i].Facility = appDbContext.Facilities.Find(booking[i].FacilityId);
+                item.Facility = appDbContext.Facilities.Find(item.FacilityId);
             }
 
             return View(booking);
@@ -83,29 +86,48 @@ namespace UfsConnectBook.Controllers
                 return View(booking);
             }
 
+            var userEmail = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(userEmail))
+                return RedirectToAction("Login", "Account");
+
             booking.BookingDate = DateTime.Now;
             booking.Duration = booking.EndTime - booking.StartTime;
-            booking.userEmail = User.Identity?.Name;
+            booking.userEmail = userEmail;
             booking.Status = "Pending";
 
             appDbContext.Bookings.Add(booking);
             appDbContext.SaveChanges();
 
-            return RedirectToAction(nameof(Index), new { Message = "Your new Booking has been made successful but has not yet been approved, Please Make booking payments" });
+            return RedirectToAction(nameof(Index), new
+            {
+                Message = "Your new Booking has been made successful but has not yet been approved, Please Make booking payments"
+            });
         }
 
         public IActionResult Details(int bookingID)
         {
             var booking = appDbContext.Bookings.Find(bookingID);
+
+            if (booking == null)
+                return NotFound();
+
             booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
+
             return View(booking);
         }
 
         public IActionResult Edit(int bookingID)
         {
             var booking = appDbContext.Bookings.Find(bookingID);
+
+            if (booking == null)
+                return NotFound();
+
             booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
+
             PopulateDDL();
+
             return View(booking);
         }
 
@@ -129,16 +151,26 @@ namespace UfsConnectBook.Controllers
         public IActionResult Cancel(int bookingID)
         {
             var booking = appDbContext.Bookings.Find(bookingID);
+
+            if (booking == null)
+                return NotFound();
+
             booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
+
             return View(booking);
         }
 
         [HttpPost]
         public IActionResult Cancel(Booking booking)
         {
-            var _booking = appDbContext.Bookings.Find(booking.Id);
-            _booking.Status = "Canceled";
-            appDbContext.Update(_booking);
+            var existingBooking = appDbContext.Bookings.Find(booking.Id);
+
+            if (existingBooking == null)
+                return NotFound();
+
+            existingBooking.Status = "Canceled";
+
+            appDbContext.Update(existingBooking);
             appDbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index), new { Message = "Booking was deleted Successfully.." });
@@ -162,10 +194,7 @@ namespace UfsConnectBook.Controllers
 
                 var options = new SessionCreateOptions
                 {
-                    PaymentMethodTypes = new List<string>
-                    {
-                        "card"
-                    },
+                    PaymentMethodTypes = new List<string> { "card" },
                     LineItems = new List<SessionLineItemOptions>
                     {
                         new SessionLineItemOptions
@@ -198,12 +227,12 @@ namespace UfsConnectBook.Controllers
             }
         }
 
-        public async Task<IActionResult> Success()
+        public IActionResult Success()
         {
             return View("Success");
         }
 
-        public IActionResult Cancel()
+        public IActionResult CancelPayment()
         {
             return View("Index");
         }
@@ -215,16 +244,17 @@ namespace UfsConnectBook.Controllers
         }
 
         [HttpPost]
-        public IActionResult FeedBack(FeedBack _feedback)
+        public IActionResult FeedBack(FeedBack feedback)
         {
             if (ModelState.IsValid)
             {
-                wrapper.Review.Add(_feedback);
+                wrapper.Review.Add(feedback);
                 wrapper.Save();
+
                 return RedirectToAction("Index", "Booking");
             }
 
-            return View();
+            return View(feedback);
         }
     }
 }
