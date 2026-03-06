@@ -19,7 +19,6 @@ private readonly UserManager<AppUser> userManager;
 private readonly IRepositoryWrapper wrapper;
 private readonly StripeSettings _Settings;
 
-```
     public BookingController(AppDbContext appDbContext, UserManager<AppUser> userManager, IRepositoryWrapper wrapper, IOptions<StripeSettings> settings)
     {
         this.appDbContext = appDbContext;
@@ -249,6 +248,6 @@ private readonly StripeSettings _Settings;
         return View();
     }
 }
-```
+
 
 }
