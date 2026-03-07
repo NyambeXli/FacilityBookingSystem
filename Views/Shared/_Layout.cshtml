@@ -49,6 +49,14 @@
                 border-radius: 4px;
             }
 
+        .welcome-text {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-right: 15px;
+            padding: 8px 0;
+        }
+
         .menu-btn {
             background-color: #ffffff;
             color: #0d6efd !important;
@@ -127,6 +135,9 @@
                     <ul class="navbar-nav ms-auto align-items-center text-center">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item d-none d-lg-block">
+                                <span class="welcome-text">Welcome, @User.Identity.Name</span>
+                            </li>
                             <li class="nav-item dropdown me-2">
                                 <a class="nav-link menu-btn dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-bars me-2"></i> MENU
