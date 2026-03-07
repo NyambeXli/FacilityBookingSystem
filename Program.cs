@@ -4,6 +4,7 @@ using Stripe;
 using UfsConnectBook.Data;
 using UfsConnectBook.Models.Entities;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
