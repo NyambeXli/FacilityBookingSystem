@@ -1,34 +1,121 @@
-﻿@model IEnumerable<Facility>
+@model IEnumerable<Facility>
 @{
     ViewData["Title"] = "Facilities";
 }
-<h4>Avaialble facilities</h4>
-<table class="table table-hover table-striped">
-    <thead>
-        <tr>
-            <th>Facility ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var facility in Model)
-        {
-            <tr>
-                <td>@facility.FacilityId</td>
-                <td>@facility.Name</td>
-                <td>@facility.Category!.Name</td>
-                <td>
-                   
-                    <a asp-action="Details" asp-route-FacilityId="@facility.FacilityId" class="text-primary ">View Facility</a>
-                    @if (!User.IsInRole("AppUser"))
-                    {
-                        <a asp-action="Edit" asp-route-FacilityId="@facility.FacilityId" class="text-warning ">Edit facility </a>
-                        <a asp-action="Delete" asp-route-FacilityId="@facility.FacilityId" class="text-danger ">Delete facility</a>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+<style>
+    body {
+        background-image: url('/images/Booking.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .facility-container {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        padding: 30px;
+        margin: 40px auto;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    h4 {
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+        text-align: center;
+    }
+
+    .table {
+        margin-top: 20px;
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        background-color: #f8f9fa;
+        border-top: none;
+        color: #555;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .facility-row:hover {
+        background-color: rgba(76, 175, 80, 0.05) !important;
+        transition: background-color 0.2s ease;
+    }
+
+    .badge-category {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .action-link {
+        font-weight: 600;
+        text-decoration: none;
+        margin-right: 15px;
+        font-size: 0.9rem;
+        transition: opacity 0.2s;
+    }
+
+    .action-link:hover {
+        opacity: 0.7;
+        text-decoration: underline;
+    }
+
+    .id-column {
+        color: #888;
+        font-family: monospace;
+    }
+</style>
+
+<div class="facility-container">
+    <h4>Available Facilities</h4>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Facility ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var facility in Model)
+                {
+                    <tr class="facility-row">
+                        <td class="id-column">#@facility.FacilityId</td>
+                        <td class="fw-bold text-dark">@facility.Name</td>
+                        <td>
+                            <span class="badge-category">@facility.Category!.Name</span>
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-FacilityId="@facility.FacilityId" class="action-link text-primary">
+                                <i class="fas fa-eye me-1"></i>View
+                            </a>
+                            @if (!User.IsInRole("AppUser"))
+                            {
+                                <a asp-action="Edit" asp-route-FacilityId="@facility.FacilityId" class="action-link text-warning">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </a>
+                                <a asp-action="Delete" asp-route-FacilityId="@facility.FacilityId" class="action-link text-danger">
+                                    <i class="fas fa-trash me-1"></i>Delete
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
