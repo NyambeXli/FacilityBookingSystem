@@ -1,55 +1,166 @@
-﻿@{
+@model AppUser
+@{
     ViewData["Title"] = "Profile";
 }
-@model AppUser
-<div class="pagetitle">
-    <h1>Profile</h1>
+
+<style>
+    body {
+        background-image: url('/images/Booking.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .profile-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        padding: 40px;
+        max-width: 700px;
+        margin: 50px auto;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 15px;
+    }
+
+    .profile-header h2 {
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .profile-header p {
+        color: #666;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .info-row {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        align-items: center;
+    }
+
+    .info-label {
+        flex: 0 0 35%;
+        font-weight: 600;
+        color: #555;
+    }
+
+    .info-value {
+        flex: 0 0 65%;
+        color: #333;
+    }
+
+    .action-section {
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        background-color: #4CAF50;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 8px;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #45a049;
+        color: white;
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        border: 2px solid #4CAF50;
+        padding: 8px 23px;
+        border-radius: 8px;
+        font-weight: bold;
+        color: #4CAF50;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .breadcrumb-container {
+        max-width: 700px;
+        margin: 20px auto -40px auto;
+    }
+
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item a {
+        color: white;
+        text-decoration: none;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .breadcrumb-item.active {
+        color: #ddd;
+    }
+</style>
+
+<div class="breadcrumb-container">
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item">Users</li>
+            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
             <li class="breadcrumb-item active">Profile</li>
         </ol>
     </nav>
-</div><!-- End Page Title -->
+</div>
 
-<section class="section profile">
-    <div class="row">
+<div class="profile-card">
+    <div class="profile-header">
+        <h2>@Model.Name @Model.Surname</h2>
+        <p>Profile Details</p>
     </div>
-    <div class="fade show active profile-overview" id="profile-overview">
 
-        <h5 class="card-title">Profile Details</h5>
-
-
-        <div class="row">
-            <div class="col-lg-3 col-md-4 label ">Full Name</div>
-            <div class="col-lg-9 col-md-8">@Model.Name @Model.Surname</div>
+    <div class="profile-body">
+        <div class="info-row">
+            <div class="info-label">Full Name</div>
+            <div class="info-value">@Model.Name @Model.Surname</div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-3 col-md-4 label">Company</div>
-            <div class="col-lg-9 col-md-8">University of the Free State</div>
+        <div class="info-row">
+            <div class="info-label">Company</div>
+            <div class="info-value">University of the Free State</div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-3 col-md-4 label">Student No/ Staff No / ID No</div>
-            <div class="col-lg-9 col-md-8">@Model.Identity</div>
+        <div class="info-row">
+            <div class="info-label">ID / Student No</div>
+            <div class="info-value">@Model.Identity</div>
         </div>
-       
-            <div class="row">
-                <div class="col-lg-3 col-md-4 label">Email</div>
-                <div class="col-lg-9 col-md-8">@Model.Email</div>
-            </div>
-            <div class="row">
-                <div class="col-lg-9 col-md-8"><a class="btn btn-primary" asp-action="Edit">Edit</a></div>
-            </div>
+
+        <div class="info-row">
+            <div class="info-label">Email Address</div>
+            <div class="info-value">@Model.Email</div>
+        </div>
+    </div>
+
+    <div class="action-section">
+        <a class="btn-primary" asp-action="Edit">Edit Profile</a>
         
-
-
-
-        <br/>
-         <form asp-action="ChangePassword" asp-controller="Profile" method="post" role="form">
-            <button class="btn btn-primary" type="submit" title="Login">ChangePassword</button>
-         </form>
+        <form asp-action="ChangePassword" asp-controller="Profile" method="post" style="display: inline;">
+            <button class="btn-outline" type="submit">Change Password</button>
+        </form>
     </div>
-</section>
+</div>
