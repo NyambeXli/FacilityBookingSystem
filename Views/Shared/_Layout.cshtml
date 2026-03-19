@@ -1,6 +1,6 @@
 @{
-    string controller = ViewContext.RouteData.Values["controller"].ToString();
-    string action = ViewContext.RouteData.Values["action"].ToString();
+    string controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    string action = ViewContext.RouteData.Values["action"]?.ToString();
 }
 
 <!DOCTYPE html>
@@ -23,96 +23,70 @@
         }
 
         .navbar {
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 0.8rem 1rem;
-        }
-
-        .navbar-brand i {
-            font-size: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .navbar-brand:hover i {
-            transform: scale(1.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.6rem 1rem;
         }
 
         .nav-link {
             font-weight: 500;
-            color: rgba(255,255,255,0.85) !important;
+            color: rgba(255,255,255,0.9) !important;
             transition: all 0.2s;
-            margin: 0 5px;
+            margin: 0 3px;
         }
 
-            .nav-link:hover, .nav-link.active {
-                color: #fff !important;
-                background-color: rgba(255,255,255,0.1);
-                border-radius: 4px;
-            }
-
-        .welcome-text {
-            color: rgba(255,255,255,0.9);
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-right: 15px;
-            padding: 8px 0;
+        .nav-link:hover, .nav-link.active {
+            color: #fff !important;
+            background-color: rgba(255,255,255,0.15);
+            border-radius: 6px;
         }
 
-        .menu-btn {
+        .btn-booking {
             background-color: #ffffff;
             color: #0d6efd !important;
-            font-weight: bold;
-            border-radius: 50px;
-            padding: 8px 20px !important;
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 6px 16px !important;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: none;
         }
 
-            .menu-btn:hover {
-                background-color: #e9ecef !important;
-                transform: translateY(-1px);
-            }
-
-        main {
-            flex: 1;
+        .btn-booking:hover {
+            background-color: #f1f3f5 !important;
+            transform: translateY(-1px);
         }
+
+        .welcome-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .logout-link {
+            color: #ff9999 !important;
+            font-weight: 600;
+        }
+
+        main { flex: 1; }
 
         footer {
-            background-color: #212529;
-            color: #ced4da;
-            padding: 3rem 0;
+            background-color: #1a1d20;
+            color: #adb5bd;
+            padding: 2.5rem 0;
             margin-top: auto;
         }
-
-        .footer-newsletter input {
-            border-radius: 4px 0 0 4px;
-        }
-
-        .footer-newsletter button {
-            border-radius: 0 4px 4px 0;
-        }
-
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: opacity 0.3s;
-        }
-
-            .logout-btn:hover {
-                opacity: 0.9;
-            }
     </style>
 </head>
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
-                    <i class="fas fa-home me-2"></i>
-                    <span class="fw-bold d-none d-sm-inline">Connect Book</span>
+                    <i class="fas fa-calendar-check me-2"></i>
+                    <span class="fw-bold">ConectBook</span>
                 </a>
 
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#MainSiteNavbar">
@@ -120,70 +94,58 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="MainSiteNavbar">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-center">
+                    <ul class="navbar-nav me-auto align-items-center">
                         <li class="nav-item">
                             <a class="nav-link @(controller == "Home" && action == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(controller == "Home" && action == "About" ? "active" : "")" asp-controller="Home" asp-action="About">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(controller == "Home" && action == "Help" ? "active" : "")" asp-controller="Home" asp-action="Help">Help</a>
-                        </li>
-                    </ul>
-
-                    <ul class="navbar-nav ms-auto align-items-center text-center">
-                        @if (User.Identity.IsAuthenticated)
+                        
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("AppUser"))
                         {
-                            <li class="nav-item d-none d-lg-block">
-                                <span class="welcome-text">Welcome, @User.Identity.Name</span>
-                            </li>
-                            <li class="nav-item dropdown me-2">
-                                <a class="nav-link menu-btn dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-bars me-2"></i> MENU
+                            <li class="nav-item ms-lg-3">
+                                <a class="nav-link btn-booking" asp-controller="Booking" asp-action="Create">
+                                    <i class="fas fa-plus-circle me-1"></i> New Booking
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2" aria-labelledby="userMenu">
-                                    <li class="dropdown-header">Logged in as @User.Identity.Name</li>
-                                    <li><hr class="dropdown-divider"></li>
-
-                                    @if (User.IsInRole("AppUser"))
-                                    {
-                                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Facility" asp-action="Index"><i class="fas fa-building me-2"></i>Available Facilities</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Booking" asp-action="Create"><i class="fas fa-plus-circle me-2"></i>Add Booking</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Booking" asp-action="Index"><i class="fas fa-list me-2"></i>List My Bookings</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key me-2"></i>Change Password</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="Notification"><i class="fas fa-bell me-2"></i>Notifications</a></li>
-                                    }
-
-                                    @if (User.IsInRole("Incharge") || User.IsInRole("InchargeG") || User.IsInRole("InchargeP") || User.IsInRole("InchargeL") || User.IsInRole("InchargeS"))
-                                    {
-                                        <li><a class="dropdown-item" asp-controller="InChargeProfile" asp-action="Index"><i class="fas fa-user-shield me-2"></i>Staff Profile</a></li>
-                                        <li><a class="dropdown-item" asp-controller="InCharge" asp-action="Index"><i class="fas fa-tasks me-2"></i>Booking Details</a></li>
-                                        <li><a class="dropdown-item" asp-controller="InCharge" asp-action="BookingHistory"><i class="fas fa-history me-2"></i>History</a></li>
-                                    }
-
-                                    @if (User.IsInRole("Manager"))
-                                    {
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Index"><i class="fas fa-users-cog me-2"></i>Manage Incharges</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-calendar-check me-2"></i>Manage Bookings</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Facility" asp-action="Create"><i class="fas fa-plus me-2"></i>New Facility</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Facilities"><i class="fas fa-tools me-2"></i>Facility Ops</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="UsersWithoutPayments"><i class="fas fa-credit-card me-2"></i>Payment Tracking</a></li>
-                                    }
-
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <li><a class="dropdown-item" asp-controller="Administrator" asp-action="Index"><i class="fas fa-shield-alt me-2"></i>Security Settings</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Administrator" asp-action="Users"><i class="fas fa-users me-2"></i>View All Users</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-eye me-2"></i>Global Bookings</a></li>
-                                    }
-                                </ul>
                             </li>
                             <li class="nav-item">
-                                <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
-                                    <button type="submit" class="logout-btn">Sign Out</button>
-                                </form>
+                                <a class="nav-link @(controller == "Booking" && action == "Index" ? "active" : "")" asp-controller="Booking" asp-action="Index">
+                                    <i class="fas fa-history me-1"></i> My Bookings
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item me-3 d-none d-xl-block">
+                                <span class="welcome-badge"><i class="fas fa-user-circle me-1"></i> @User.Identity.Name</span>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-cog me-1"></i> SETTINGS
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                                    <li class="dropdown-header">Account Management</li>
+                                    <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index"><i class="fas fa-id-card me-2"></i>Profile Details</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key me-2"></i>Security</a></li>
+                                    
+                                    @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+                                    {
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li class="dropdown-header">Administrative</li>
+                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Index">Admin Panel</a></li>
+                                    }
+                                    
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-action="Logout" asp-controller="Account" method="post">
+                                            <button type="submit" class="dropdown-item text-danger fw-bold">
+                                                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         else
@@ -192,7 +154,7 @@
                                 <a class="nav-link" asp-controller="Account" asp-action="Login">Log In</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link btn btn-outline-light ms-lg-2 px-3" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link btn btn-outline-light ms-lg-2 px-4" asp-controller="Account" asp-action="Register">Join Now</a>
                             </li>
                         }
                     </ul>
@@ -204,8 +166,8 @@
     <main class="container py-4">
         @if (ViewBag.Message != null)
         {
-            <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-                <i class="fas fa-exclamation-triangle me-2"></i>
+            <div class="alert alert-info alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 5px solid #0dcaf0 !important;">
+                <i class="fas fa-info-circle me-2"></i>
                 @ViewBag.Message
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -216,27 +178,17 @@
     <footer>
         <div class="container">
             <div class="row justify-content-between align-items-center">
-                <div class="col-md-4 mb-4 mb-md-0 text-center text-md-start">
-                    <h5 class="text-white fw-bold">Connect Book</h5>
-                    <p class="small">Efficient facility management for users and staff.</p>
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <h5 class="text-white fw-bold">ConectBook</h5>
+                    <p class="small mb-0 text-secondary">Advanced Facility Management Solution</p>
+                    <p class="small text-secondary">Contact: 060 612 3942 | lxnyambe@gmail.com</p>
                 </div>
-                <div class="col-md-5">
-                    <form class="footer-newsletter">
-                        <label class="form-label small d-block">Stay updated with our newsletter</label>
-                        <div class="input-group">
-                            <input type="email" class="form-control border-0 shadow-none" placeholder="Enter your email">
-                            <button class="btn btn-primary px-4" type="submit">Subscribe</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <hr class="my-4 border-secondary">
-            <div class="row align-items-center">
-                <div class="col-md-6 text-center text-md-start small">
-                    &copy; @DateTime.Now.Year - Connect Book Pty Ltd. All Rights Reserved.
-                </div>
-                <div class="col-md-6 text-center text-md-end small mt-2 mt-md-0">
-                    <span class="text-secondary">lxnyambe@gmail.com, 0606123942</span>
+                <div class="col-md-4 text-center text-md-end">
+                    <div class="small mb-2">&copy; @DateTime.Now.Year - Engineered by Lindele Xolani Nyambe</div>
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3">
+                        <i class="fab fa-linkedin fa-lg"></i>
+                        <i class="fab fa-github fa-lg"></i>
+                    </div>
                 </div>
             </div>
         </div>
