@@ -263,6 +263,28 @@ namespace UfsConnectBook.Controllers
             return View(model);
         }
 
+        //UNDER CONNSTRUCTION (Logic that allows the Admin to delete a user from the Database)
+         [HttpGet]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            // SKELETON: This action is currently under construction
+            return RedirectToAction(nameof(Users), new { Message = "Feature under development." });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmDeleteUser(string userId)
+        {
+            // SKELETON: Functional logic is commented out to prevent accidental data loss.
+            /*
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
+            */
+            return RedirectToAction(nameof(Users), new { Message = "User deletion is currently disabled." });
+        }
 
     }
 }
