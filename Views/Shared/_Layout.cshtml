@@ -13,88 +13,121 @@
     <link asp-href-include="/font-awesome/css/all.min.css" rel="stylesheet" />
     <link asp-href-include="/css/custom.css" rel="stylesheet" />
     <style>
+        :root {
+            --primary-blue: #0061f2;
+            --dark-surface: #1a1a1a;
+        }
+
         body {
-            background-color: #f8f9fa;
+            background-color: #f4f7f6;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Thicker Navbar to accommodate stacked links */
-        .navbar {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            padding: 1.2rem 1rem; /* Increased vertical padding */
-            min-height: 100px;
+        /* Modernized Top Navbar */
+        .navbar-main {
+            background: var(--primary-blue);
+            background: linear-gradient(135deg, #0061f2 0%, #002d72 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.75rem 0;
         }
 
         .navbar-brand {
-            font-size: 1.6rem;
-            margin-right: 2rem;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
         }
 
-        /* Stacked Left-side Navigation */
-        .stacked-nav {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-            border-right: 1px solid rgba(255,255,255,0.2);
-            padding-right: 20px;
+        /* Action Bar - PRIORITIZED LINKS */
+        .action-bar {
+            background: white;
+            border-bottom: 1px solid #e0e6ed;
+            padding: 10px 0;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
-        .stacked-nav .nav-link {
-            padding: 2px 0 !important;
-            margin: 0 !important;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Right-side Groups */
-        .nav-group-item {
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            margin: 0 8px;
-            transition: background 0.3s;
-        }
-
-        .nav-group-item:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .welcome-text-large {
-            color: #fff;
+        .nav-pill-custom {
+            color: #4a5568;
             font-weight: 600;
-            border-bottom: 2px solid #ffc107;
-            padding-bottom: 2px;
-            margin-bottom: 5px;
-            display: block;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            margin-right: 10px;
         }
 
-        .dropdown-menu {
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-            border: none;
-            margin-top: 10px;
+        .nav-pill-custom:hover {
+            background: #edf2f7;
+            color: var(--primary-blue);
         }
 
-        .logout-btn-custom {
-            background: #dc3545;
+        .nav-pill-custom.active {
+            background: var(--primary-blue);
+            color: white !important;
+        }
+
+        .nav-pill-custom i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        /* User Profile Area */
+        .user-chip {
+            background: rgba(255,255,255,0.15);
+            padding: 5px 15px;
+            border-radius: 50px;
+            color: white;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn-modern {
+            background: #ff4d4d;
             color: white;
             border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(220, 53, 69, 0.3);
+            padding: 6px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: transform 0.2s;
         }
+
+        .logout-btn-modern:hover {
+            background: #e60000;
+            transform: translateY(-1px);
+        }
+
+        /* Fixing the "Blurry/Close" links */
+        .static-nav .nav-link {
+            color: rgba(255,255,255,0.85) !important;
+            margin: 0 12px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .static-nav .nav-link:after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #ffc107;
+            transition: width .3s;
+        }
+
+        .static-nav .nav-link:hover:after { width: 100%; }
 
         main { flex: 1; }
 
         footer {
-            background-color: #212529;
-            color: #ced4da;
-            padding: 3rem 0;
+            background-color: #1a1a1a;
+            color: #a0aec0;
+            padding: 4rem 0 2rem;
             margin-top: auto;
         }
     </style>
@@ -102,109 +135,46 @@
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-main">
             <div class="container">
-                <div class="d-flex align-items-center">
-                    <a class="navbar-brand d-flex align-items-center me-4" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-home me-2"></i>
-                        <span class="fw-bold">ConectBook</span>
-                    </a>
-                    
-                    <ul class="navbar-nav stacked-nav d-none d-lg-flex">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-bolt me-2"></i>ConectBook
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="topNavbar">
+                    <ul class="navbar-nav static-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link @(controller == "Home" && action == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @(controller == "Home" && action == "About" ? "active" : "")" asp-controller="Home" asp-action="About">About</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="About">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @(controller == "Home" && action == "Help" ? "active" : "")" asp-controller="Home" asp-action="Help">Help</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Help">Help</a>
                         </li>
                     </ul>
-                </div>
 
-                <div class="collapse navbar-collapse" id="MainSiteNavbar">
-                    <ul class="navbar-nav ms-auto align-items-center">
+                    <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item text-end me-4">
-                                <span class="welcome-text-large">@User.Identity.Name</span>
-                                <a class="nav-link p-0 text-white-50" asp-controller="Profile" asp-action="Notification">
-                                    <i class="fas fa-bell me-1"></i> Notifications
+                            <li class="nav-item dropdown me-3">
+                                <a class="user-chip dropdown-toggle text-decoration-none" href="#" id="profileDrop" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user-circle me-2"></i> @User.Identity.Name
                                 </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                                    <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="Index"><i class="fas fa-id-card me-2 opacity-50"></i>My Profile</a></li>
+                                    <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key me-2 opacity-50"></i>Security</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="Notification"><i class="fas fa-bell me-2 opacity-50"></i>Notifications</a></li>
+                                </ul>
                             </li>
-
-                            @if (User.IsInRole("AppUser"))
-                            {
-                                <li class="nav-item dropdown nav-group-item">
-                                    <a class="nav-link dropdown-toggle px-3" href="#" id="bookingDrop" role="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-calendar-plus me-1"></i> Add Booking
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="Booking" asp-action="Create"><i class="fas fa-plus me-2"></i>Add Booking</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Booking" asp-action="Index"><i class="fas fa-list me-2"></i>List My Bookings</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Facility" asp-action="Index"><i class="fas fa-building me-2"></i>Available Facilities</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="nav-item dropdown nav-group-item">
-                                    <a class="nav-link dropdown-toggle px-3" href="#" id="profileDrop" role="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-user-cog me-1"></i> Profile Settings
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index"><i class="fas fa-id-card me-2"></i>My Profile</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key me-2"></i>Change Password</a></li>
-                                    </ul>
-                                </li>
-                            }
-
-                            @if (User.IsInRole("Incharge") || User.IsInRole("InchargeG") || User.IsInRole("InchargeP") || User.IsInRole("InchargeL") || User.IsInRole("InchargeS"))
-                            {
-                                <li class="nav-item dropdown nav-group-item">
-                                    <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-user-shield me-1"></i> Staff Portal
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="InChargeProfile" asp-action="Index">Staff Profile</a></li>
-                                        <li><a class="dropdown-item" asp-controller="InCharge" asp-action="Index">Booking Details</a></li>
-                                        <li><a class="dropdown-item" asp-controller="InCharge" asp-action="BookingHistory">History</a></li>
-                                    </ul>
-                                </li>
-                            }
-
-                            @if (User.IsInRole("Manager"))
-                            {
-                                <li class="nav-item dropdown nav-group-item">
-                                    <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-tasks me-1"></i> Management
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Index">Manage Incharges</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Bookings">Manage Bookings</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Facility" asp-action="Create">New Facility</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Facilities">Facility Ops</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="UsersWithoutPayments">Payment Tracking</a></li>
-                                    </ul>
-                                </li>
-                            }
-
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item dropdown nav-group-item">
-                                    <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-shield-alt me-1"></i> Admin
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-controller="Administrator" asp-action="Index">Security Settings</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Administrator" asp-action="Users">View All Users</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Bookings">Global Bookings</a></li>
-                                    </ul>
-                                </li>
-                            }
-
-                            <li class="nav-item ms-3">
-                                <form asp-action="Logout" asp-controller="Account" method="post">
-                                    <button type="submit" class="logout-btn-custom">Sign Out</button>
+                            <li class="nav-item">
+                                <form asp-action="Logout" asp-controller="Account" method="post" class="m-0">
+                                    <button type="submit" class="logout-btn-modern shadow-sm">Sign Out</button>
                                 </form>
                             </li>
                         }
@@ -214,19 +184,58 @@
                                 <a class="nav-link" asp-controller="Account" asp-action="Login">Log In</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link btn btn-outline-light ms-lg-3 px-4 py-2" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="btn btn-warning fw-bold ms-lg-3 px-4 shadow-sm" asp-controller="Account" asp-action="Register">Join Now</a>
                             </li>
                         }
                     </ul>
                 </div>
             </div>
         </nav>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="action-bar d-none d-lg-block">
+                <div class="container d-flex align-items-center">
+                    <span class="text-muted small fw-bold text-uppercase me-4">Quick Actions:</span>
+                    
+                    @if (User.IsInRole("AppUser"))
+                    {
+                        <a class="nav-pill-custom @(controller == "Booking" && action == "Create" ? "active" : "")" asp-controller="Booking" asp-action="Create">
+                            <i class="fas fa-plus-circle"></i> Add New Booking
+                        </a>
+                        <a class="nav-pill-custom @(controller == "Booking" && action == "Index" ? "active" : "")" asp-controller="Booking" asp-action="Index">
+                            <i class="fas fa-history"></i> List My Bookings
+                        </a>
+                        <a class="nav-pill-custom @(controller == "Facility" && action == "Index" ? "active" : "")" asp-controller="Facility" asp-action="Index">
+                            <i class="fas fa-search-location"></i> Available Facilities
+                        </a>
+                    }
+
+                    @if (User.IsInRole("Incharge") || User.IsInRole("InchargeG") || User.IsInRole("InchargeP") || User.IsInRole("InchargeL") || User.IsInRole("InchargeS"))
+                    {
+                        <div class="vr mx-3 text-black-50" style="height: 20px;"></div>
+                        <a class="nav-pill-custom" asp-controller="InCharge" asp-action="Index"><i class="fas fa-clipboard-list"></i> Staff Dashboard</a>
+                    }
+
+                    @if (User.IsInRole("Manager"))
+                    {
+                        <div class="vr mx-3 text-black-50" style="height: 20px;"></div>
+                        <a class="nav-pill-custom" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-tasks"></i> Manage All Bookings</a>
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="nav-pill-custom" asp-controller="Administrator" asp-action="Index"><i class="fas fa-user-shield"></i> Security Panel</a>
+                    }
+                </div>
+            </div>
+        }
     </header>
 
     <main class="container py-5">
         @if (ViewBag.Message != null)
         {
-            <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 5px solid #dc3545 !important;">
                 <i class="fas fa-exclamation-triangle me-2"></i>
                 @ViewBag.Message
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -237,28 +246,28 @@
 
     <footer>
         <div class="container">
-            <div class="row justify-content-between align-items-center">
-                <div class="col-md-4 mb-4 mb-md-0 text-center text-md-start">
-                    <h5 class="text-white fw-bold">ConectBook</h5>
-                    <p class="small">Efficient facility management for users and staff.</p>
+            <div class="row justify-content-between">
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-white fw-bold mb-3">ConectBook</h5>
+                    <p class="small">Advanced resource management for the modern enterprise. Fast, secure, and reliable.</p>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <form class="footer-newsletter">
-                        <label class="form-label small d-block">Stay updated with our newsletter</label>
-                        <div class="input-group">
-                            <input type="email" class="form-control border-0 shadow-none" placeholder="Enter your email">
-                            <button class="btn btn-primary px-4" type="submit">Subscribe</button>
+                        <label class="form-label small text-uppercase fw-bold text-secondary">Stay Updated</label>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control bg-dark border-0 text-white" placeholder="Email Address">
+                            <button class="btn btn-primary" type="button">Subscribe</button>
                         </div>
                     </form>
                 </div>
             </div>
-            <hr class="my-4 border-secondary">
-            <div class="row align-items-center">
-                <div class="col-md-6 text-center text-md-start small">
+            <hr class="my-4 border-secondary opacity-25">
+            <div class="row small">
+                <div class="col-md-6 text-center text-md-start">
                     &copy; @DateTime.Now.Year - ConectBook Pty Ltd. All Rights Reserved.
                 </div>
-                <div class="col-md-6 text-center text-md-end small mt-2 mt-md-0">
-                    <span class="text-secondary">lxnyambe@gmail.com, 0606123942</span>
+                <div class="col-md-6 text-center text-md-end text-secondary">
+                    Support: lxnyambe@gmail.com | 0606123942
                 </div>
             </div>
         </div>
