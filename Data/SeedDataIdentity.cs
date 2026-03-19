@@ -248,7 +248,6 @@ namespace UfsConnectBook.Data
                     Identity = Guid.NewGuid().ToString(),
                     Name = "Philasande",
                     Surname = "Nyambe",
-
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user, UserInChargePassword);
@@ -273,7 +272,6 @@ namespace UfsConnectBook.Data
                     Identity = Guid.NewGuid().ToString(),
                     Name = "Phumzile",
                     Surname = "Ngwamba"
-
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user, FacilityManagerPassword);
@@ -282,7 +280,6 @@ namespace UfsConnectBook.Data
                 {
                     await userManager.AddToRoleAsync(user, FacilityManagerRole);
                 }
-
             }
 
             //Seeding Default Data
@@ -311,10 +308,14 @@ namespace UfsConnectBook.Data
 
                 });
                 context.SaveChanges();
-
-
             }
-
+           VerifySeedIntegrity(context);
+        }
+        //UNDER CONSTRUCTION
+        private static void VerifySeedIntegrity(AppDbContext context)
+        {
+            // Placeholder: This method will be expanded to validate that 
+            // all required base records are present after the seeding process.
         }
     }
 }
