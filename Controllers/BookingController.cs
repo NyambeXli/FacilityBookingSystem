@@ -247,7 +247,19 @@ private readonly StripeSettings _Settings;
 
         return View();
     }
-}
+    //FUTURE MAINTENANCE SKELETON(Removes any bookings that has been pending for long for memory concerns)
+    private void CleanupExpiredBookings()
+    {
+        var now = DateTime.UtcNow;
+        var expired = appDbContext.Bookings
+            .Where(b => b.Status == "Pending" && b.StartTime < now)
+            .ToList();
 
-
+        if (expired.Any())
+        {
+            expired.ForEach(b => b.Status = "Expired");
+            appDbContext.SaveChanges();
+        }
+    }
+  }
 }
