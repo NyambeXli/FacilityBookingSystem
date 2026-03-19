@@ -178,7 +178,7 @@
                     <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                            @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item dropdown me-3">
                                     <a class="user-chip dropdown-toggle text-decoration-none" href="#" id="adminDrop" data-bs-toggle="dropdown">
@@ -247,7 +247,7 @@
                         </a>
                     }
 
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    @if (User.IsInRole("Manager"))
                     {
                         <a class="nav-pill-custom" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-check-double"></i> Approve/Deny Bookings</a>
                         <a class="nav-pill-custom" asp-controller="Manager" asp-action="Reports"><i class="fas fa-chart-line"></i> View Reports</a>
