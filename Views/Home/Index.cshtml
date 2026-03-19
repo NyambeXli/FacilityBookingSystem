@@ -5,117 +5,192 @@
     ViewBag.Title = "Home page";
 }
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
     body {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         background-attachment: fixed;
         margin: 0;
         padding: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: #2d3436;
     }
 
-    .bg-light:hover {
-        transform: scale(1.05);
-        transition: transform 0.3s ease;
+    .hero-section {
+        padding: 80px 0 60px;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        margin-bottom: 50px;
     }
 
-    .card-definition {
-        margin: 20px auto;
-        max-width: 600px;
-        background-color: rgba(255, 255, 255, 0.9);
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    .main-title {
+        font-weight: 800;
+        letter-spacing: -1px;
+        background: linear-gradient(90deg, #0d6efd, #6610f2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 15px;
+    }
+
+    .engineer-text {
+        font-size: 1.2rem;
+        color: #6c757d;
+        min-height: 1.5em;
     }
 
     .facility-card {
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        transition: all 0.3s ease;
+        background: #ffffff;
+        border: 1px solid rgba(0,0,0,0.05);
+        border-radius: 16px;
+        padding: 24px;
+        height: 100%;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .facility-image {
+        border-radius: 12px;
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        margin-bottom: 20px;
+        filter: grayscale(20%);
+    }
+
+    .info-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #e7f3ff;
+        color: #0d6efd;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .step-guide {
+        background: #0d6efd;
+        color: white;
+        padding: 40px 0;
+        margin-top: 60px;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .step-icon {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        opacity: 0.9;
     }
 </style>
 
-<div>
-    <div id="Title" class="bg-secondary pt-4 pb-4 mt-1 rounded-2 shadow">
-        <div class="text-center text-light text-sm-start text-md-center display-4">NyambeXli Facility Booking System</div>
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-3 main-title">ConectBook Facility Portal</h1>
+        <div id="welcomeText" class="engineer-text fw-medium"></div>
+        <div class="mt-4">
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                Streamlining university resource management. To begin your reservation, 
+                please access the <strong>Menu</strong> above.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="fw-bold m-0">Available Resources</h2>
+        <span class="text-muted small">Information Desk</span>
     </div>
 
-    <br />
-    <br />
-
-    <div class="card-body text-center">
-        <h3 class="fw-bold" id="welcomeText">Engineered by Lindele Xolani Nyambe</h3>
-    </div>
-
-    <br />
-    <div id="Facilities" class="container">
-        <h4 class="mb-4">Different types of facilities</h4>
-        <div class="row">
-            <div class="col-md-3 col-sm-6 mb-3">
-                <div class="facility-card bg-light m-1 pb-3 text-center rounded">
-                    <img src="~/images/ParkingSlots.jpg" class="img-thumbnail mt-2 w-75" style="height: 150px; object-fit: cover;" />
-                    <h5 class="fst-italic mt-2">Parking Spaces</h5>
-                    <p class="px-2">Secure your parking slot NOW!</p>
-                    <div class="ratings text-warning">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
-                    </div>
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="facility-card">
+                <span class="info-badge">Secure Access</span>
+                <img src="/images/ParkingSlots.jpg" class="facility-image" />
+                <h5 class="fw-bold">Parking Spaces</h5>
+                <p class="text-muted small">Reserved student and staff parking bays with 24/7 security monitoring.</p>
+                <div class="text-warning small">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-3 col-sm-6 mb-3">
-                <div class="facility-card bg-light m-1 pb-3 text-center rounded">
-                    <img src="~/images/LaundryR.jpg" class="img-thumbnail mt-2 w-75" style="height: 150px; object-fit: cover;" />
-                    <h5 class="fst-italic mt-2">Laundry Facilities</h5>
-                    <p class="px-2">Book in advance. SECURE YOUR SPACE!</p>
-                    <div class="ratings text-warning">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
-                    </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="facility-card">
+                <span class="info-badge">In-House</span>
+                <img src="/images/LaundryR.jpg" class="facility-image" />
+                <h5 class="fw-bold">Laundry Room</h5>
+                <p class="text-muted small">Avoid the queue. Pre-book your machine and receive status notifications.</p>
+                <div class="text-warning small">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-3 col-sm-6 mb-3">
-                <div class="facility-card bg-light m-1 pb-3 text-center rounded">
-                    <img src="~/images/LibraryRoom.jpg" class="img-thumbnail mt-2 w-75" style="height: 150px; object-fit: cover;" />
-                    <h5 class="fst-italic mt-2">Library Discussion Room</h5>
-                    <p class="px-2">Enlighten your education.</p>
-                    <div class="ratings text-warning">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
-                    </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="facility-card">
+                <span class="info-badge">Quiet Zone</span>
+                <img src="/images/LibraryRoom.jpg" class="facility-image" />
+                <h5 class="fw-bold">Library Study</h5>
+                <p class="text-muted small">Private and group discussion rooms equipped with smart whiteboards.</p>
+                <div class="text-warning small">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-3 col-sm-6 mb-3">
-                <div class="facility-card bg-light m-1 pb-3 text-center rounded">
-                    <img src="~/images/Gym.jpg" class="img-thumbnail mt-2 w-75" style="height: 150px; object-fit: cover;" />
-                    <h5 class="fst-italic mt-2">Gym Facilities</h5>
-                    <p class="px-2">Get yourself healthy.</p>
-                    <div class="ratings text-warning">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
-                    </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="facility-card">
+                <span class="info-badge">Wellness</span>
+                <img src="/images/Gym.jpg" class="facility-image" />
+                <h5 class="fw-bold">Gym Center</h5>
+                <p class="text-muted small">Fully equipped fitness center. Check peak hours and book your session.</p>
+                <div class="text-warning small">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div class="step-guide">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <i class="fas fa-user-plus step-icon"></i>
+                <h6>1. Register</h6>
+                <p class="small opacity-75">Create your student profile</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-calendar-check step-icon"></i>
+                <h6>2. Reserve</h6>
+                <p class="small opacity-75">Pick a time and facility</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-credit-card step-icon"></i>
+                <h6>3. Secure</h6>
+                <p class="small opacity-75">Complete payment via Stripe</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
-    var welcomeText = document.getElementById("welcomeText");
-    var fullText = "Engineered by Lindele Xolani Nyambe";
-    var words = fullText.split(' ');
-    welcomeText.textContent = '';
+    const welcomeText = document.getElementById("welcomeText");
+    const fullText = "Engineered by Lindele Xolani Nyambe";
+    let index = 0;
 
-    function displayWords() {
-        words.forEach(function (word, index) {
-            setTimeout(function () {
-                welcomeText.textContent += word + (index < words.length - 1 ? ' ' : '');
-            }, index * 500);
-        });
+    function typeEffect() {
+        if (index < fullText.length) {
+            welcomeText.textContent += fullText.charAt(index);
+            index++;
+            setTimeout(typeEffect, 70);
+        }
     }
-
-    displayWords();
+    
+    window.onload = typeEffect;
 </script>
-
-</html>
