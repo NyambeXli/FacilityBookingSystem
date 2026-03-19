@@ -1,4 +1,4 @@
-﻿@model RegisterModel
+@model RegisterModel
 @{
     ViewBag.Title = "Student Register";
 }
@@ -44,7 +44,7 @@
             <div class="registration-card">
                 <h2 class="fw-bold text-primary mb-3">User Registration</h2>
                 <p class="text-muted">
-                    You are not yet registered for using Ufs Connect Book.
+                    You are not yet registered for using Connect Book.
                     Please enter your personal details below.
                 </p>
 
@@ -72,7 +72,7 @@
 
                     <div class="form-group">
                         <label asp-for="Identification" class="fw-bold">Identification (10 Digits)</label>
-                        <input asp-for="Identification" class="form-control" placeholder="e.g. 1234567890" />
+                        <input asp-for="Identification" class="form-control" placeholder="e.g. 1234567890" maxlength="10" />
                         <span asp-validation-for="Identification" class="text-danger small"></span>
                     </div>
 
@@ -117,7 +117,13 @@
                     </li>
                     <li class="mb-3">
                         <i class="fas fa-lock text-primary me-2"></i>
-                        <strong>Password:</strong> Must be at least <strong>6 characters</strong> long.
+                        <strong>Password:</strong> 
+                        <span class="text-danger">
+                            <strong>
+                                For this demo, any 6 characters will work (e.g., 123456 or aaaaaa). 
+                                Strong password requirements have been disabled for easy access.
+                            </strong>
+                        </span>
                     </li>
                     <li class="mb-3">
                         <i class="fas fa-envelope text-primary me-2"></i>
@@ -125,7 +131,7 @@
                     </li>
                     <li>
                         <i class="fas fa-check-circle text-success me-2"></i>
-                        Ensure to remember the regisrtration details for log in purposes.
+                        Ensure to remember the registration details for log in purposes.
                     </li>
                 </ul>
             </div>
