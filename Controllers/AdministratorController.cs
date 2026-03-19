@@ -14,7 +14,7 @@ using UfsConnectBook.Models;
 
 namespace UfsConnectBook.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin", "Manager")]
     public class AdministratorController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
