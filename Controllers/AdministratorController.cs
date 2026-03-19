@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UfsConnectBook.Data;
@@ -30,10 +30,8 @@ namespace UfsConnectBook.Controllers
             this.appDbContext = appDbContext;
         }
 
-
         public async Task<IActionResult> Index(string Message)
         {
-
             if (!string.IsNullOrWhiteSpace(Message))
                 ViewBag.Message = Message;
             var users = appDbContext.Users.ToList();
@@ -45,11 +43,12 @@ namespace UfsConnectBook.Controllers
             }
             return View(managerUsers);
         }
+
         public IActionResult CreateManager()
         {
-
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateManager(RegisterModel model)
         {
@@ -87,10 +86,9 @@ namespace UfsConnectBook.Controllers
             ViewBag.IsModelError = false;
             return View(model);
         }
+
         public IActionResult Orders(string Message)
         {
-
-
             if (!string.IsNullOrWhiteSpace(Message))
                 ViewBag.Message = Message;
 
@@ -98,14 +96,13 @@ namespace UfsConnectBook.Controllers
             .Equals(User.Identity.Name) && s.Status != "Canceled").OrderByDescending(s => s.Id).ToList();
             for (int i = 0; i < booking.Count(); i++)
             {
-                booking[i].Facility = appDbContext.Facilities.Find(booking[i].FacilityId);
+                booking[i].Size = appDbContext.Facilities.Find(booking[i].FacilityId);
             }
             return View(booking);
         }
+
         public async Task<IActionResult> Incharge(string Message)
         {
-
-
             if (!string.IsNullOrWhiteSpace(Message))
                 ViewBag.Message = Message;
             var users = appDbContext.Users.ToList();
@@ -117,10 +114,9 @@ namespace UfsConnectBook.Controllers
             }
             return View(inchargeUsers);
         }
+
         public async Task<IActionResult> Users(string Message)
         {
-
-
             if (!string.IsNullOrWhiteSpace(Message))
                 ViewBag.Message = Message;
             var users = appDbContext.Users.ToList();
@@ -132,18 +128,19 @@ namespace UfsConnectBook.Controllers
             }
             return View(appUsers);
         }
+
         public IActionResult AdminBookingHistory()
         {
             return View();
         }
+
         public IActionResult GeneratePdfReport()
         {
-
             var pdfContent = "Report generated";
             var pdfBytes = Encoding.UTF8.GetBytes(pdfContent);
             return File(pdfBytes, "application/pdf", "Report.pdf");
-
         }
+
         public IActionResult GenerateBookingHistoryReport()
         {
             var bookings = appDbContext.Bookings
@@ -152,6 +149,7 @@ namespace UfsConnectBook.Controllers
                 .ToList();
             return View("GenerateBookingHistoryReport", bookings);
         }
+
         [HttpGet]
         public async Task<IActionResult> DeleteManagerUser(string userId)
         {
@@ -193,7 +191,6 @@ namespace UfsConnectBook.Controllers
                 return RedirectToAction(nameof(Index), new { Message = $"Manager user {user.Email} has been deleted successfully." });
             }
 
-
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
@@ -201,6 +198,7 @@ namespace UfsConnectBook.Controllers
 
             return View(user);
         }
+
         [HttpGet]
         public async Task<IActionResult> EditManagerUser(string userId)
         {
@@ -263,6 +261,32 @@ namespace UfsConnectBook.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return NotFound();
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+            return View(user);
+        }
 
+        [HttpPost, ActionName("DeleteUser")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmDeleteUser(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return NotFound();
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+            if (user.UserName == User.Identity.Name)
+            {
+                return RedirectToAction(nameof(Users), new { Message = "Error: You cannot delete your own account." });
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Users), new { Message = $"User {user.Email} deleted successfully." });
+            }
+            return RedirectToAction(nameof(Users), new { Message = "Error: Failed to delete user." });
+        }
     }
 }
