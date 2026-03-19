@@ -8,258 +8,276 @@ using Stripe;
 using Stripe.Checkout;
 using Microsoft.Extensions.Options;
 using UfsConnectBook.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace UfsConnectBook.Controllers
 {
-[Authorize]
-public class BookingController : Controller
-{
-private readonly AppDbContext appDbContext;
-private readonly UserManager<AppUser> userManager;
-private readonly IRepositoryWrapper wrapper;
-private readonly StripeSettings _Settings;
-
-    public BookingController(AppDbContext appDbContext, UserManager<AppUser> userManager, IRepositoryWrapper wrapper, IOptions<StripeSettings> settings)
+    [Authorize]
+    public class BookingController : Controller
     {
-        this.appDbContext = appDbContext;
-        this.userManager = userManager;
-        this.wrapper = wrapper;
-        _Settings = settings.Value;
-    }
+        private readonly AppDbContext appDbContext;
+        private readonly UserManager<AppUser> userManager;
+        private readonly IRepositoryWrapper wrapper;
+        private readonly StripeSettings _Settings;
 
-    [HttpPost]
-    public IActionResult ConfirmCancel(int bookingID)
-    {
-        var booking = appDbContext.Bookings.Find(bookingID);
-
-        if (booking == null)
+        public BookingController(AppDbContext appDbContext, UserManager<AppUser> userManager, IRepositoryWrapper wrapper, IOptions<StripeSettings> settings)
         {
-            return NotFound();
+            this.appDbContext = appDbContext;
+            this.userManager = userManager;
+            this.wrapper = wrapper;
+            _Settings = settings.Value;
         }
 
-        booking.Status = "Canceled";
-        appDbContext.SaveChanges();
-
-        return RedirectToAction(nameof(Index), new { Message = "Booking was canceled successfully." });
-    }
-
-    public IActionResult Index(string Message)
-    {
-        if (!string.IsNullOrWhiteSpace(Message))
-            ViewBag.Message = Message;
-
-        var booking = appDbContext.Bookings
-            .Where(s => s.userEmail == User.Identity.Name && s.Status != "Canceled")
-            .OrderByDescending(s => s.Id)
-            .ToList();
-
-        for (int i = 0; i < booking.Count; i++)
+        [HttpPost]
+        public IActionResult ConfirmCancel(int bookingID)
         {
-            booking[i].Facility = appDbContext.Facilities.Find(booking[i].FacilityId);
-        }
+            var booking = appDbContext.Bookings.Find(bookingID);
 
-        return View(booking);
-    }
-
-    public IActionResult Create()
-    {
-        PopulateDDL();
-        return View();
-    }
-
-    [HttpPost]
-    public IActionResult Create(Booking booking)
-    {
-        if (!ModelState.IsValid)
-        {
-            PopulateDDL();
-            return View(booking);
-        }
-
-        if (booking.StartTime >= booking.EndTime)
-        {
-            ModelState.AddModelError(nameof(Booking.StartTime), "The booking duration is invalid");
-            PopulateDDL();
-            return View(booking);
-        }
-
-        booking.StartTime = booking.StartTime.ToUniversalTime();
-        booking.EndTime = booking.EndTime.ToUniversalTime();
-        booking.BookingDate = DateTime.UtcNow;
-        booking.Duration = booking.EndTime - booking.StartTime;
-        booking.userEmail = User.Identity?.Name;
-        booking.Status = "Pending";
-
-        appDbContext.Bookings.Add(booking);
-        appDbContext.SaveChanges();
-
-        return RedirectToAction(nameof(Index), new { Message = "Your new Booking has been made successful but has not yet been approved, Please Make booking payments" });
-    }
-
-    public IActionResult Details(int bookingID)
-    {
-        var booking = appDbContext.Bookings.Find(bookingID);
-
-        if (booking == null)
-            return NotFound();
-
-        booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
-        return View(booking);
-    }
-
-    public IActionResult Edit(int bookingID)
-    {
-        var booking = appDbContext.Bookings.Find(bookingID);
-
-        if (booking == null)
-            return NotFound();
-
-        booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
-        PopulateDDL();
-        return View(booking);
-    }
-
-    [HttpPost]
-    public IActionResult Edit(Booking booking)
-    {
-        if (!ModelState.IsValid)
-        {
-            PopulateDDL();
-            return View(booking);
-        }
-
-        booking.StartTime = booking.StartTime.ToUniversalTime();
-        booking.EndTime = booking.EndTime.ToUniversalTime();
-        booking.Duration = booking.EndTime - booking.StartTime;
-
-        appDbContext.Bookings.Update(booking);
-        appDbContext.SaveChanges();
-
-        return RedirectToAction(nameof(Index), new { Message = "Booking Updated Successfully.." });
-    }
-
-    public IActionResult Cancel(int bookingID)
-    {
-        var booking = appDbContext.Bookings.Find(bookingID);
-
-        if (booking == null)
-            return NotFound();
-
-        booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
-        return View(booking);
-    }
-
-    [HttpPost]
-    public IActionResult Cancel(Booking booking)
-    {
-        var _booking = appDbContext.Bookings.Find(booking.Id);
-
-        if (_booking == null)
-            return NotFound();
-
-        _booking.Status = "Canceled";
-
-        appDbContext.Update(_booking);
-        appDbContext.SaveChanges();
-
-        return RedirectToAction(nameof(Index), new { Message = "Booking was deleted Successfully.." });
-    }
-
-    private void PopulateDDL()
-    {
-        ViewBag.FacilityId = new SelectList(appDbContext.Facilities.ToList(), "FacilityId", "Name");
-    }
-
-    public IActionResult Payment(string amount)
-    {
-        try
-        {
-            var currency = "zar";
-
-            var successUrl = Url.Action("Success", "Booking", null, Request.Scheme);
-            var cancelUrl = Url.Action("Cancel", "Booking", null, Request.Scheme);
-
-            StripeConfiguration.ApiKey = _Settings.SecretKey;
-
-            var options = new SessionCreateOptions
+            if (booking == null)
             {
-                PaymentMethodTypes = new List<string>
-                {
-                    "card"
-                },
-                LineItems = new List<SessionLineItemOptions>
-                {
-                    new SessionLineItemOptions
-                    {
-                        PriceData = new SessionLineItemPriceDataOptions
-                        {
-                            Currency = currency,
-                            UnitAmount = (long)(100 * 90),
-                            ProductData = new SessionLineItemPriceDataProductDataOptions
-                            {
-                                Name = "Booking amount Due"
-                            }
-                        },
-                        Quantity = 1
-                    }
-                },
-                Mode = "payment",
-                SuccessUrl = successUrl,
-                CancelUrl = cancelUrl
-            };
+                return NotFound();
+            }
 
-            var service = new SessionService();
-            var session = service.Create(options);
-
-            return Redirect(session.Url);
-        }
-        catch
-        {
-            return Redirect("/Home/Index");
-        }
-    }
-
-    public async Task<IActionResult> Success()
-    {
-        return View("Success");
-    }
-
-    public IActionResult Cancel()
-    {
-        return View("Index");
-    }
-
-    [HttpGet]
-    public IActionResult FeedBack()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public IActionResult FeedBack(FeedBack _feedback)
-    {
-        if (ModelState.IsValid)
-        {
-            wrapper.Review.Add(_feedback);
-            wrapper.Save();
-            return RedirectToAction("Index", "Booking");
-        }
-
-        return View();
-    }
-    //FUTURE MAINTENANCE SKELETON(Removes any bookings that has been pending for long for memory concerns)
-    private void CleanupExpiredBookings()
-    {
-        var now = DateTime.UtcNow;
-        var expired = appDbContext.Bookings
-            .Where(b => b.Status == "Pending" && b.StartTime < now)
-            .ToList();
-
-        if (expired.Any())
-        {
-            expired.ForEach(b => b.Status = "Expired");
+            booking.Status = "Canceled";
             appDbContext.SaveChanges();
+
+            return RedirectToAction(nameof(Index), new { Message = "Booking was canceled successfully." });
+        }
+
+        public IActionResult Index(string Message)
+        {
+            if (!string.IsNullOrWhiteSpace(Message))
+                ViewBag.Message = Message;
+
+            var booking = appDbContext.Bookings
+                .Where(s => s.userEmail == User.Identity.Name && s.Status != "Canceled")
+                .OrderByDescending(s => s.Id)
+                .ToList();
+
+            for (int i = 0; i < booking.Count; i++)
+            {
+                booking[i].Facility = appDbContext.Facilities.Find(booking[i].FacilityId);
+            }
+
+            return View(booking);
+        }
+
+        public IActionResult Create()
+        {
+            PopulateDDL();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Booking booking)
+        {
+            if (!ModelState.IsValid)
+            {
+                PopulateDDL();
+                return View(booking);
+            }
+
+            if (booking.StartTime >= booking.EndTime)
+            {
+                ModelState.AddModelError(nameof(Booking.StartTime), "The booking duration is invalid");
+                PopulateDDL();
+                return View(booking);
+            }
+
+            var startUtc = booking.StartTime.ToUniversalTime();
+            var endUtc = booking.EndTime.ToUniversalTime();
+            var userEmail = User.Identity?.Name;
+
+            bool hasConflict = appDbContext.Bookings.Any(b =>
+                b.Status != "Canceled" &&
+                b.Status != "Expired" &&
+                (
+                    (b.FacilityId == booking.FacilityId || b.userEmail == userEmail) &&
+                    (startUtc < b.EndTime.ToUniversalTime() && endUtc > b.StartTime.ToUniversalTime())
+                )
+            );
+
+            if (hasConflict)
+            {
+                ModelState.AddModelError("", "Time Conflict: This facility is already booked for the selected time, or you have another overlapping booking at this time.");
+                PopulateDDL();
+                return View(booking);
+            }
+
+            booking.StartTime = startUtc;
+            booking.EndTime = endUtc;
+            booking.BookingDate = DateTime.UtcNow;
+            booking.Duration = booking.EndTime - booking.StartTime;
+            booking.userEmail = userEmail;
+            booking.Status = "Pending";
+
+            appDbContext.Bookings.Add(booking);
+            appDbContext.SaveChanges();
+
+            return RedirectToAction(nameof(Index), new { Message = "Your new Booking has been made successful but has not yet been approved, Please Make booking payments" });
+        }
+
+        public IActionResult Details(int bookingID)
+        {
+            var booking = appDbContext.Bookings.Find(bookingID);
+
+            if (booking == null)
+                return NotFound();
+
+            booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
+            return View(booking);
+        }
+
+        public IActionResult Edit(int bookingID)
+        {
+            var booking = appDbContext.Bookings.Find(bookingID);
+
+            if (booking == null)
+                return NotFound();
+
+            booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
+            PopulateDDL();
+            return View(booking);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Booking booking)
+        {
+            if (!ModelState.IsValid)
+            {
+                PopulateDDL();
+                return View(booking);
+            }
+
+            booking.StartTime = booking.StartTime.ToUniversalTime();
+            booking.EndTime = booking.EndTime.ToUniversalTime();
+            booking.Duration = booking.EndTime - booking.StartTime;
+
+            appDbContext.Bookings.Update(booking);
+            appDbContext.SaveChanges();
+
+            return RedirectToAction(nameof(Index), new { Message = "Booking Updated Successfully.." });
+        }
+
+        public IActionResult Cancel(int bookingID)
+        {
+            var booking = appDbContext.Bookings.Find(bookingID);
+
+            if (booking == null)
+                return NotFound();
+
+            booking.Facility = appDbContext.Facilities.Find(booking.FacilityId);
+            return View(booking);
+        }
+
+        [HttpPost]
+        public IActionResult Cancel(Booking booking)
+        {
+            var _booking = appDbContext.Bookings.Find(booking.Id);
+
+            if (_booking == null)
+                return NotFound();
+
+            _booking.Status = "Canceled";
+
+            appDbContext.Update(_booking);
+            appDbContext.SaveChanges();
+
+            return RedirectToAction(nameof(Index), new { Message = "Booking was deleted Successfully.." });
+        }
+
+        private void PopulateDDL()
+        {
+            ViewBag.FacilityId = new SelectList(appDbContext.Facilities.ToList(), "FacilityId", "Name");
+        }
+
+        public IActionResult Payment(string amount)
+        {
+            try
+            {
+                var currency = "zar";
+
+                var successUrl = Url.Action("Success", "Booking", null, Request.Scheme);
+                var cancelUrl = Url.Action("Cancel", "Booking", null, Request.Scheme);
+
+                StripeConfiguration.ApiKey = _Settings.SecretKey;
+
+                var options = new SessionCreateOptions
+                {
+                    PaymentMethodTypes = new List<string> { "card" },
+                    LineItems = new List<SessionLineItemOptions>
+                    {
+                        new SessionLineItemOptions
+                        {
+                            PriceData = new SessionLineItemPriceDataOptions
+                            {
+                                Currency = currency,
+                                UnitAmount = (long)(100 * 90),
+                                ProductData = new SessionLineItemPriceDataProductDataOptions
+                                {
+                                    Name = "Booking amount Due"
+                                }
+                            },
+                            Quantity = 1
+                        }
+                    },
+                    Mode = "payment",
+                    SuccessUrl = successUrl,
+                    CancelUrl = cancelUrl
+                };
+
+                var service = new SessionService();
+                var session = service.Create(options);
+
+                return Redirect(session.Url);
+            }
+            catch
+            {
+                return Redirect("/Home/Index");
+            }
+        }
+
+        public async Task<IActionResult> Success()
+        {
+            return View("Success");
+        }
+
+        public IActionResult Cancel()
+        {
+            return View("Index");
+        }
+
+        [HttpGet]
+        public IActionResult FeedBack()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult FeedBack(FeedBack _feedback)
+        {
+            if (ModelState.IsValid)
+            {
+                wrapper.Review.Add(_feedback);
+                wrapper.Save();
+                return RedirectToAction("Index", "Booking");
+            }
+
+            return View();
+        }
+
+        private void CleanupExpiredBookings()
+        {
+            var now = DateTime.UtcNow;
+            var expired = appDbContext.Bookings
+                .Where(b => b.Status == "Pending" && b.StartTime < now)
+                .ToList();
+
+            if (expired.Any())
+            {
+                expired.ForEach(b => b.Status = "Expired");
+                appDbContext.SaveChanges();
+            }
         }
     }
-  }
 }
