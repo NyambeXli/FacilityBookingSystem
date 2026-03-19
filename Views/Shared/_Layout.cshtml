@@ -28,7 +28,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Modernized Top Navbar */
         .navbar-main {
             background: var(--primary-blue);
             background: linear-gradient(135deg, #0061f2 0%, #002d72 100%);
@@ -41,7 +40,6 @@
             letter-spacing: -0.5px;
         }
 
-        /* Action Bar - PRIORITIZED LINKS */
         .action-bar {
             background: white;
             border-bottom: 1px solid #e0e6ed;
@@ -76,7 +74,6 @@
             font-size: 1.1rem;
         }
 
-        /* User Profile Area */
         .user-chip {
             background: rgba(255,255,255,0.15);
             padding: 5px 15px;
@@ -103,7 +100,6 @@
             transform: translateY(-1px);
         }
 
-        /* Fixing the "Blurry/Close" links */
         .static-nav .nav-link {
             color: rgba(255,255,255,0.85) !important;
             margin: 0 12px;
@@ -121,6 +117,27 @@
         }
 
         .static-nav .nav-link:hover:after { width: 100%; }
+
+        /* Admin Dropdown styling to ensure clear visibility */
+        .admin-dropdown-menu {
+            min-width: 280px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 12px;
+        }
+
+        .admin-dropdown-menu .dropdown-item {
+            padding: 12px 20px;
+            font-weight: 500;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .admin-dropdown-menu .dropdown-item:last-child { border-bottom: none; }
+
+        .admin-dropdown-menu .dropdown-item i {
+            width: 25px;
+            color: var(--primary-blue);
+        }
 
         main { flex: 1; }
 
@@ -161,17 +178,38 @@
                     <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item dropdown me-3">
-                                <a class="user-chip dropdown-toggle text-decoration-none" href="#" id="profileDrop" data-bs-toggle="dropdown">
-                                    <i class="fas fa-user-circle me-2"></i> @User.Identity.Name
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
-                                    <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="Index"><i class="fas fa-id-card me-2 opacity-50"></i>My Profile</a></li>
-                                    <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key me-2 opacity-50"></i>Security</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="Notification"><i class="fas fa-bell me-2 opacity-50"></i>Notifications</a></li>
-                                </ul>
-                            </li>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                            {
+                                <li class="nav-item dropdown me-3">
+                                    <a class="user-chip dropdown-toggle text-decoration-none" href="#" id="adminDrop" data-bs-toggle="dropdown">
+                                        <i class="fas fa-user-shield me-2"></i> Admin Control
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 admin-dropdown-menu">
+                                        <li><h6 class="dropdown-header">System Administration</h6></li>
+                                        <li><a class="dropdown-item" asp-controller="Administrator" asp-action="Users"><i class="fas fa-users-cog"></i> View All Users</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-calendar-check"></i> View All Bookings</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Reports"><i class="fas fa-file-invoice"></i> Generate Booking Report</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Administrator" asp-action="Index"><i class="fas fa-shield-alt"></i> Security Panel</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key"></i> Change Password</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item dropdown me-3">
+                                    <a class="user-chip dropdown-toggle text-decoration-none" href="#" id="profileDrop" data-bs-toggle="dropdown">
+                                        <i class="fas fa-user-circle me-2"></i> @User.Identity.Name
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                                        <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="Index"><i class="fas fa-id-card me-2 opacity-50"></i>My Profile</a></li>
+                                        <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key me-2 opacity-50"></i>Security</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="Notification"><i class="fas fa-bell me-2 opacity-50"></i>Notifications</a></li>
+                                    </ul>
+                                </li>
+                            }
+
                             <li class="nav-item">
                                 <form asp-action="Logout" asp-controller="Account" method="post" class="m-0">
                                     <button type="submit" class="logout-btn-modern shadow-sm">Sign Out</button>
@@ -211,21 +249,17 @@
                         </a>
                     }
 
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    {
+                        <a class="nav-pill-custom" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-check-double"></i> Approve/Deny Bookings</a>
+                        <a class="nav-pill-custom" asp-controller="Manager" asp-action="Reports"><i class="fas fa-chart-line"></i> View Reports</a>
+                        <a class="nav-pill-custom" asp-controller="Facility" asp-action="Create"><i class="fas fa-plus"></i> New Facility</a>
+                    }
+
                     @if (User.IsInRole("Incharge") || User.IsInRole("InchargeG") || User.IsInRole("InchargeP") || User.IsInRole("InchargeL") || User.IsInRole("InchargeS"))
                     {
                         <div class="vr mx-3 text-black-50" style="height: 20px;"></div>
                         <a class="nav-pill-custom" asp-controller="InCharge" asp-action="Index"><i class="fas fa-clipboard-list"></i> Staff Dashboard</a>
-                    }
-
-                    @if (User.IsInRole("Manager"))
-                    {
-                        <div class="vr mx-3 text-black-50" style="height: 20px;"></div>
-                        <a class="nav-pill-custom" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-tasks"></i> Manage All Bookings</a>
-                    }
-
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a class="nav-pill-custom" asp-controller="Administrator" asp-action="Index"><i class="fas fa-user-shield"></i> Security Panel</a>
                     }
                 </div>
             </div>
