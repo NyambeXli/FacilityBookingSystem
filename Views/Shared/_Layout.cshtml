@@ -203,9 +203,13 @@
                                             <li><a class="dropdown-item" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-eye"></i> Global Bookings</a></li>
                                         }
 
+                                        @if (!User.IsInRole("Admin") && !User.IsInRole("Manager"))
+                                        {
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key"></i> Change Password</a></li>
+                                        }
                                     </ul>
+
                                 </li>
                             }
                             else
@@ -216,7 +220,10 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                                         <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="Index"><i class="fas fa-id-card me-2 opacity-50"></i>My Profile</a></li>
-                                        <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key me-2 opacity-50"></i>Security</a></li>
+                                        @if (!User.IsInRole("Admin") && !User.IsInRole("Manager"))
+                                        {
+                                            <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key me-2 opacity-50"></i>Security</a></li>
+                                        }
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="Notification"><i class="fas fa-bell me-2 opacity-50"></i>Notifications</a></li>
                                     </ul>
