@@ -5,6 +5,13 @@ namespace UfsConnectBook.Data
 {
     public class SeedDataIdentity
     {
+       // --- [ NB: SYSTEM MATURITY NOTICE ] ---------------------------------------------------
+       // FULLY FUNCTIONAL ROLES: AppUser, Manager and Admin
+       // UNDER CONSTRUCTION: Specialized 'Incharge' sub-roles (G, P, L, S). 
+       // These accounts are seeded for architectural testing, but their specific 
+       // departmental dashboards are still being engineered.
+       // --------------------------------------------------------------------------------------
+        
         private const string FacilityAdminUser = "Admin";
         private const string FacilityAdminPassword = "&0137Deon.XliA";
         private const string FacilittyAdminEmail = "lxnyambe@ufs.ac.za";
