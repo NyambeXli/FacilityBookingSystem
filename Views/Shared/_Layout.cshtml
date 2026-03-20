@@ -292,14 +292,17 @@
                         </a>
 
                         @if (User.IsInRole("Manager"))
-                        {
-                            <a class="nav-pill-custom @(controller == "Manager" && action == "Reports" ? "active" : "")" asp-controller="Manager" asp-action="Reports">
-                                <i class="fas fa-chart-line"></i> View Reports
-                            </a>
-                            <a class="nav-pill-custom @(controller == "Facility" && action == "Create" ? "active" : "")" asp-controller="Facility" asp-action="Create">
-                                <i class="fas fa-plus"></i> New Facility
-                            </a>
-                        }
+                       {
+                       <a class="nav-pill-custom @(controller == "Facility" && action == "Create" ? "active" : "")" asp-controller="Facility" asp-action="Create">
+                           <i class="fas fa-plus"></i> New Facility
+                       </a>
+                       <a class="nav-pill-custom @(controller == "Manager" && action == "Facilities" ? "active" : "")" asp-controller="Manager" asp-action="Facilities">
+                          <i class="fas fa-tools"></i> Facility Ops
+                       </a>
+                     <a class="nav-pill-custom @(controller == "Manager" && action == "UsersWithoutPayments" ? "active" : "")" asp-controller="Manager" asp-action="UsersWithoutPayments">
+                         <i class="fas fa-credit-card"></i> Payment Tracking
+                      </a>
+                     }
                         
                      @if (User.IsInRole("Admin"))
                        {
