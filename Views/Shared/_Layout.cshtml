@@ -260,7 +260,30 @@
                         <a class="nav-pill-custom @(controller == "Facility" && action == "Index" ? "active" : "")" asp-controller="Facility" asp-action="Index">
                             <i class="fas fa-search-location"></i> Available Facilities
                         </a>
+                      <div class="dropdown d-inline-block">
+                           <a class="nav-pill-custom dropdown-toggle" href="#" role="button" id="quickProfileDrop" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fas fa-user-cog"></i> Profile Settings
+                      </a>
+                          <ul class="dropdown-menu shadow border-0 mt-2" aria-labelledby="quickProfileDrop">
+                      <li>
+                          <a class="dropdown-item py-2" asp-controller="Profile" asp-action="Index">
+                          <i class="fas fa-id-card me-2 opacity-75"></i> My Profile
+                      </a>
+                      </li>
+                      <li>
+                          <a class="dropdown-item py-2" asp-controller="Profile" asp-action="ChangePassword">
+                          <i class="fas fa-key me-2 opacity-75"></i> Security
+                      </a>
+                     </li>
+                    <li>
+                         <a class="dropdown-item py-2" asp-controller="Profile" asp-action="Notification">
+                    <i class="fas fa-bell me-2 opacity-75"></i> Notifications
+                  </a>
+                </li>
+             </ul>
+         </div>
                     }
+                    
 
                     @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                     {
