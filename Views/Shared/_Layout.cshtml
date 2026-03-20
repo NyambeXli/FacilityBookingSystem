@@ -301,12 +301,18 @@
                             </a>
                         }
                         
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a class="nav-pill-custom @(controller == "Administrator" && action == "Users" ? "active" : "")" asp-controller="Administrator" asp-action="Users">
-                                <i class="fas fa-users"></i> User Management
-                            </a>
-                        }
+                     @if (User.IsInRole("Admin"))
+                       {
+                          <a class="nav-pill-custom @(controller == "Administrator" && action == "Index" ? "active" : "")" asp-controller="Administrator" asp-action="Index">
+                               <i class="fas fa-shield-alt"></i> Security Settings
+                          </a>
+                          <a class="nav-pill-custom @(controller == "Administrator" && action == "Users" ? "active" : "")" asp-controller="Administrator" asp-action="Users">
+                               <i class="fas fa-users"></i> View All Users
+                          </a>
+                          <a class="nav-pill-custom @(controller == "Manager" && action == "Bookings" ? "active" : "")" asp-controller="Manager" asp-action="Bookings">
+                               <i class="fas fa-eye"></i> Global Bookings
+                          </a>
+                      }
                     }
 
                     @if (User.IsInRole("Incharge") || User.IsInRole("InchargeG") || User.IsInRole("InchargeP") || User.IsInRole("InchargeL") || User.IsInRole("InchargeS"))
