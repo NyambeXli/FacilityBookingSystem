@@ -178,7 +178,7 @@
                     <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            @if (User.IsInRole("Admin"))
+                            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                             {
                                 <li class="nav-item dropdown me-3">
                                     <a class="user-chip dropdown-toggle text-decoration-none" href="#" id="adminDrop" data-bs-toggle="dropdown">
@@ -187,6 +187,8 @@
                                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 admin-dropdown-menu">
                                         <li><h6 class="dropdown-header">System Administration</h6></li>
                                         <li><a class="dropdown-item" asp-controller="Administrator" asp-action="Users"><i class="fas fa-users-cog"></i> View All Users</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-calendar-check"></i> View All Bookings</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Reports"><i class="fas fa-file-invoice"></i> Generate Booking Report</a></li>
                                         <li><a class="dropdown-item" asp-controller="Administrator" asp-action="Index"><i class="fas fa-shield-alt"></i> Security Panel</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" asp-controller="Profile" asp-action="ChangePassword"><i class="fas fa-key"></i> Change Password</a></li>
@@ -247,10 +249,8 @@
                         </a>
                     }
 
-                    @if (User.IsInRole(User.IsInRole("Manager"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                     {
-                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-calendar-check"></i> View All Bookings</a></li>
-                        <li><a class="dropdown-item" asp-controller="Manager" asp-action="Reports"><i class="fas fa-file-invoice"></i> Generate Booking Report</a></li>
                         <a class="nav-pill-custom" asp-controller="Manager" asp-action="Bookings"><i class="fas fa-check-double"></i> Approve/Deny Bookings</a>
                         <a class="nav-pill-custom" asp-controller="Manager" asp-action="Reports"><i class="fas fa-chart-line"></i> View Reports</a>
                         <a class="nav-pill-custom" asp-controller="Facility" asp-action="Create"><i class="fas fa-plus"></i> New Facility</a>
@@ -302,7 +302,7 @@
                 </div>
                 <div class="col-md-6 text-center text-md-end text-secondary">
                     Support: lxnyambe@gmail.com | 0606123942
-                </div> 
+                </div>
             </div>
         </div>
     </footer>
