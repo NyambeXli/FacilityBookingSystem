@@ -391,22 +391,22 @@
         </div>
         <div class="card-body bg-white p-3">
             <p class="text-muted mb-3" style="font-size: 0.8rem; line-height: 1.3;">
-                To save time, use these demo accounts or <b>register your own</b> to test the system.
+                To save time, use these demo accounts or <b>register your own</b>.
             </p>
             
             <div class="mb-2 border-bottom pb-2">
                 <small class="d-block fw-bold text-uppercase text-secondary" style="font-size: 0.6rem;">Admin Account</small>
                 <div class="small mt-1">
-                    <span class="text-primary">Email:</span> <code>lxnyambe@ufs.ac.za</code><br/>
-                    <span class="text-danger">Password:</span> <code>&0137Deon.XliA</code>
+                    <span class="text-primary">Email:</span> <code>admin@bookflow.com</code><br/>
+                    <span class="text-danger">Password:</span> <code>Admin123!</code>
                 </div>
             </div>
 
             <div class="mb-2 border-bottom pb-2">
                 <small class="d-block fw-bold text-uppercase text-secondary" style="font-size: 0.6rem;">Manager Account</small>
                 <div class="small mt-1">
-                    <span class="text-primary">Email:</span> <code>pngwamba@ufs.ac.za</code><br/>
-                    <span class="text-danger">Password:</span> <code>&0137Deon.XliM</code>
+                    <span class="text-primary">Email:</span> <code>manager@bookflow.com</code><br/>
+                    <span class="text-danger">Password:</span> <code>Manage123!</code>
                 </div>
             </div>
 
@@ -422,7 +422,15 @@
 </div>
 
 <script>
-    function toggleDemo(showFull) {
+    // Check the saved state as soon as the script loads
+    document.addEventListener("DOMContentLoaded", function() {
+        const isHidden = sessionStorage.getItem('demoWidgetHidden');
+        if (isHidden === 'true') {
+            toggleDemo(false, false); // Hide it immediately without animation
+        }
+    });
+
+    function toggleDemo(showFull, saveState = true) {
         const card = document.getElementById('demo-card');
         const launcher = document.getElementById('demo-launcher');
         const widget = document.getElementById('demo-widget');
@@ -431,12 +439,15 @@
             card.style.display = 'block';
             launcher.style.display = 'none';
             widget.style.width = '300px';
+            if(saveState) sessionStorage.setItem('demoWidgetHidden', 'false');
         } else {
             card.style.display = 'none';
             launcher.style.display = 'block';
             widget.style.width = 'auto';
+            if(saveState) sessionStorage.setItem('demoWidgetHidden', 'true');
         }
     }
 </script>
+
 </body>
 </html>
