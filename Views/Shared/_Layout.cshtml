@@ -153,8 +153,9 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark navbar-main">
             <div class="container">
-                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
-                    <i class="fas fa-bolt me-2"></i>ConectBook
+                <a class="navbar-brand fw-bold d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <img src="/images/profile.jpg" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.8);" class="me-2 shadow-sm">
+                    <span>ConectBook</span>
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar">
@@ -281,13 +282,13 @@
                           <a class="dropdown-item py-2" asp-controller="Profile" asp-action="ChangePassword">
                           <i class="fas fa-key me-2 opacity-75"></i> Security
                       </a>
-                     </li>
+                       </li>
                     <li>
-                         <a class="dropdown-item py-2" asp-controller="Profile" asp-action="Notification">
+                          <a class="dropdown-item py-2" asp-controller="Profile" asp-action="Notification">
                     <i class="fas fa-bell me-2 opacity-75"></i> Notifications
                   </a>
                 </li>
-             </ul>
+               </ul>
          </div>
                     }
                     
@@ -304,12 +305,12 @@
                            <i class="fas fa-plus"></i> New Facility
                        </a>
                        <a class="nav-pill-custom @(controller == "Manager" && action == "Facilities" ? "active" : "")" asp-controller="Manager" asp-action="Facilities">
-                          <i class="fas fa-tools"></i> Facility Ops
+                        <i class="fas fa-tools"></i> Facility Ops
                        </a>
-                     <a class="nav-pill-custom @(controller == "Manager" && action == "UsersWithoutPayments" ? "active" : "")" asp-controller="Manager" asp-action="UsersWithoutPayments">
-                         <i class="fas fa-credit-card"></i> Payment Tracking
+                      <a class="nav-pill-custom @(controller == "Manager" && action == "UsersWithoutPayments" ? "active" : "")" asp-controller="Manager" asp-action="UsersWithoutPayments">
+                          <i class="fas fa-credit-card"></i> Payment Tracking
                       </a>
-                     }
+                      }
                         
                      @if (User.IsInRole("Admin"))
                        {
@@ -422,11 +423,10 @@
 </div>
 
 <script>
-    // Check the saved state as soon as the script loads
     document.addEventListener("DOMContentLoaded", function() {
         const isHidden = sessionStorage.getItem('demoWidgetHidden');
         if (isHidden === 'true') {
-            toggleDemo(false, false); // Hide it immediately without animation
+            toggleDemo(false, false); 
         }
     });
 
