@@ -114,4 +114,16 @@
         
         <a asp-action="Index" class="back-link">Cancel and Return</a>
     </form>
+
+    <hr style="margin: 30px 0; border-top: 1px solid #f0f0f0;" />
+
+    <div>
+        <form asp-controller="Account" asp-action="DeactivateAccount" method="post">
+            <button type="submit" class="btn btn-warning w-100 mb-2" style="border-radius: 8px; padding: 10px; font-weight: bold;">Deactivate Account</button>
+        </form>
+
+        <form asp-controller="Account" asp-action="DeleteAccount" method="post" onsubmit="return confirm('Are you sure you want to permanently delete your account? This action cannot be undone.');">
+            <button type="submit" class="btn btn-danger w-100" style="border-radius: 8px; padding: 10px; font-weight: bold;">Delete Account</button>
+        </form>
+    </div>
 </div>
